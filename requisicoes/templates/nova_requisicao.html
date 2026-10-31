@@ -1,0 +1,288 @@
+{% macro lookup(key, label, required=false) -%}
+<div class="field lookup-field">
+  <button class="lookup-label" type="button" data-lookup="{{ key }}" aria-haspopup="dialog"
+    aria-controls="lookup-dialog">{{ label }}{% if required %} *{% endif %}<i data-lucide="search"
+      aria-hidden="true"></i></button>
+  <div class="lookup-value"><input id="{{ key }}" aria-label="{{ label }}" readonly placeholder="Selecionar…"
+      data-reference="{{ key }}"><button class="icon-button" type="button" data-clear="{{ key }}"
+      aria-label="Limpar {{ label }}"><i data-lucide="x" aria-hidden="true"></i></button></div>
+</div>
+{%- endmacro %}
+{% macro field(key, label, type='text', required=false) -%}
+<label class="field"><span>{{ label }}{% if required %} *{% endif %}</span><input id="{{ key }}" type="{{ type }}" {% if
+    required %}required{% endif %} {% if type=='number' %}min="0" step="any" {% endif %} {% if type=='text'
+    %}maxlength="200" {% endif %}></label>
+{%- endmacro %}
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <title>Nova requisição · Supersonic</title>
+  <link rel="icon" href="{{ url_for('static', filename='img/supersonic-mark.svg') }}" type="image/svg+xml">
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/global.css', v='5') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/requisicao.css', v='1') }}">
+  <script src="{{ url_for('static', filename='js/vendor/lucide-1.49.0.min.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/layout.js', v='8') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/requisicao-modelo.js', v='1') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/requisicao.js', v='1') }}" defer></script>
+</head>
+
+<body data-page-title="Nova requisição" data-page="new-request">
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <div class="app-shell">
+    <div data-layout="sidebar" data-component-url="{{ url_for('component', filename='sidebar.html') }}"></div>
+    <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+    <div class="app-main">
+      <div data-layout="topbar" data-component-url="{{ url_for('component', filename='topbar.html') }}"></div>
+      <main class="content request-editor" id="conteudo">
+        <a class="subtle-link back-link" href="{{ url_for('index') }}"><i data-lucide="arrow-left"
+            aria-hidden="true"></i> Voltar às requisições</a>
+        <header class="editor-heading">
+          <div>
+            <div class="eyebrow">COMPRAS &amp; MANUTENÇÃO</div>
+            <h1>Nova requisição<span>.</span></h1>
+            <p>Organize a solicitação, inclua os itens e revise os detalhes.</p>
+          </div>
+          <span class="draft-badge"><i data-lucide="file-pen-line" aria-hidden="true"></i> Rascunho nesta aba</span>
+        </header>
+        <div class="editor-notice"><i data-lucide="info" aria-hidden="true"></i>
+          <p>Consultas com exemplos fictícios. Os dados permanecem nesta aba; baixe o modelo antes de sair. Nenhuma
+            requisição é enviada ao ERP.</p>
+        </div>
+        <div class="editor-toolbar">
+          <div><strong id="item-count">0 itens</strong><span> na solicitação</span></div>
+          <div class="editor-actions"><button type="button" class="clear-button" id="download-draft"><i
+                data-lucide="download" aria-hidden="true"></i> Baixar modelo JSON</button><button type="button"
+              class="primary-link" id="review-draft"><i data-lucide="check" aria-hidden="true"></i> Revisar
+              rascunho</button></div>
+        </div>
+        <div class="request-tabs" role="tablist" aria-label="Dados da requisição">
+          {% for key, label, icon in [('geral','Geral','file-text'), ('itens','Itens','package'),
+          ('localizacoes','Localizações','map-pin'), ('baixas','Baixas','package-check'),
+          ('anexos','Anexos','paperclip'), ('cotacoes','Cotações','tags')] %}
+          <button type="button" role="tab" id="tab-{{ key }}" aria-controls="panel-{{ key }}"
+            aria-selected="{{ 'true' if loop.first else 'false' }}" tabindex="{{ 0 if loop.first else -1 }}"
+            data-tab="{{ key }}"><i data-lucide="{{ icon }}" aria-hidden="true"></i>{{ label }}</button>
+          {% endfor %}
+        </div>
+        <section class="editor-panel" role="tabpanel" id="panel-geral" aria-labelledby="tab-geral" tabindex="0">
+          <div class="panel-heading">
+            <div>
+              <h2>Dados gerais</h2>
+              <p>Os campos em azul abrem consultas. * Necessário para revisar este modelo.</p>
+            </div><span class="draft-badge">Situação ERP: não atribuída</span>
+          </div>
+          <form id="general-form" novalidate>
+            <div class="form-grid">
+              <div class="field"><button type="button" class="lookup-label" data-lookup="codigo" aria-haspopup="dialog"
+                  aria-controls="lookup-dialog">Código <i data-lucide="search" aria-hidden="true"></i></button><input
+                  aria-label="Código da nova requisição" value="Ainda não atribuído" readonly></div>
+              <label class="field"><span>Tipo</span><select id="tipo">
+                  <option value="produto">Produto</option>
+                </select></label>
+              {{ lookup('filial', 'Filial', true) }}
+              {{ lookup('tarefa', 'Tarefa', true) }}
+              {{ lookup('funcionario', 'Funcionário', true) }}
+              {{ field('dataReferencia', 'Data de referência', 'date', true) }}
+              {{ field('dataLimiteEntrega', 'Data limite de entrega', 'date') }}
+              {{ lookup('fornecedor', 'Fornecedor') }}
+              {{ lookup('setor', 'Setor') }}
+              <label class="field form-wide"><span>Observação *</span><textarea id="observacao" required
+                  maxlength="2000" placeholder="Descreva a necessidade da compra e sua finalidade."></textarea></label>
+              {{ lookup('aprovador', 'Aprovador indicado') }}
+              {{ lookup('liberador', 'Liberador indicado') }}
+              {{ lookup('filialOS', 'Filial da O.S.') }}
+              {{ field('ordemServico', 'Ordem de serviço') }}
+              <label class="field"><span>Tipo de requisição</span><select id="tipoRequisicao" disabled>
+                  <option>Catálogo a definir</option>
+                </select></label>
+            </div>
+            <fieldset class="classification">
+              <legend>Classificação</legend>
+              <div class="form-grid">
+                {{ lookup('unidadeNegocio', 'Unidade de negócio') }}
+                {{ lookup('centroGasto', 'Centro de gasto') }}
+                {{ lookup('centroCusto', 'Centro de custo') }}
+                {{ lookup('classeSintetica', 'Classificação sintética') }}
+                {{ lookup('classeAnalitica', 'Classificação analítica') }}
+              </div>
+            </fieldset>
+          </form>
+          <details class="audit-details">
+            <summary>Aprovação e rastreabilidade</summary>
+            <p>Aprovado em / por, liberado em / por, incluído em / por e atualizado em / por serão preenchidos pela
+              integração. Indicar um aprovador ou liberador não executa essas ações.</p>
+          </details>
+          <div class="panel-footer"><button class="primary-link" type="button" data-next="itens">Continuar para itens <i
+                data-lucide="arrow-right" aria-hidden="true"></i></button></div>
+        </section>
+        <section class="editor-panel" role="tabpanel" id="panel-itens" aria-labelledby="tab-itens" tabindex="0" hidden>
+          <div class="panel-heading">
+            <div>
+              <h2>Itens da requisição</h2>
+              <p>Inclua cada produto como uma linha independente.</p>
+            </div>
+          </div>
+          <form id="item-form" novalidate>
+            <div class="form-grid">
+              {{ lookup('produto', 'Produto', true) }}
+              {{ field('quantidade', 'Quantidade', 'number', true) }}
+              <label class="field"><span>Unidade</span><input id="unidade" readonly
+                  placeholder="Do produto selecionado"></label>
+              {{ lookup('veiculo', 'Veículo') }}
+              {{ field('valorInformado', 'Valor informado', 'number') }}
+              {{ field('mediaConsumo', 'Média de consumo', 'number') }}
+              {{ field('aplicacao', 'Aplicação') }}
+              <label class="check-field"><input id="critico" type="checkbox"> Item crítico</label>
+              <label class="field form-wide"><span>Observação do item</span><textarea id="observacaoItem"
+                  maxlength="2000" placeholder="Informações complementares deste produto."></textarea></label>
+            </div>
+            <p class="field-note">O campo Valor segue a referência fornecida. Não é usado para calcular totais nesta
+              etapa.</p>
+            <p class="form-alert" id="item-alert" role="alert" hidden></p>
+            <div class="editor-actions"><button class="primary-link" type="submit" id="add-item"><i data-lucide="plus"
+                  aria-hidden="true"></i> Incluir item</button><button class="clear-button" type="button"
+                id="cancel-item">Limpar campos</button></div>
+          </form>
+          <div class="table-scroll" role="region" aria-label="Itens incluídos" tabindex="0">
+            <table>
+              <caption>Itens incluídos <span id="items-caption">(0)</span></caption>
+              <thead>
+                <tr>
+                  <th scope="col">Seq.</th>
+                  <th scope="col">Produto / código</th>
+                  <th scope="col">Quantidade</th>
+                  <th scope="col">Unidade</th>
+                  <th scope="col">Cotado?</th>
+                  <th scope="col">Pedido?</th>
+                  <th scope="col">Observação</th>
+                  <th scope="col">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="items-body"></tbody>
+            </table>
+          </div>
+        </section>
+        <section class="editor-panel" role="tabpanel" id="panel-localizacoes" aria-labelledby="tab-localizacoes"
+          tabindex="0" hidden>
+          <div class="panel-heading">
+            <div>
+              <h2>Localizações dos itens</h2>
+              <p>Vincule uma localização a um item já incluído.</p>
+            </div>
+          </div>
+          <form id="location-form" novalidate>
+            <div class="form-grid">
+              <label class="field"><span>Item / produto *</span><select id="location-item" required>
+                  <option value="">Inclua um item primeiro</option>
+                </select></label>
+              {{ lookup('localizacao', 'Localização', true) }}
+              {{ field('quantidadeLocalizacao', 'Quantidade', 'number', true) }}
+            </div>
+            <p class="form-alert" id="location-alert" role="alert" hidden></p>
+            <div class="editor-actions"><button class="primary-link" type="submit"><i data-lucide="plus"
+                  aria-hidden="true"></i> Incluir localização</button><button class="clear-button" id="cancel-location"
+                type="button">Limpar campos</button></div>
+          </form>
+          <div class="table-scroll" role="region" aria-label="Localizações incluídas" tabindex="0">
+            <table>
+              <caption>Localizações incluídas</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Item / produto</th>
+                  <th scope="col">Localização / código</th>
+                  <th scope="col">Quantidade</th>
+                  <th scope="col">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="locations-body"></tbody>
+            </table>
+          </div>
+          <p class="field-note">Datas e usuários de inclusão/atualização serão informados pela integração.</p>
+        </section>
+        <section class="editor-panel" role="tabpanel" id="panel-anexos" aria-labelledby="tab-anexos" tabindex="0"
+          hidden>
+          <div class="panel-heading">
+            <div>
+              <h2>Anexos</h2>
+              <p>Organize imagens e PDFs de apoio à solicitação.</p>
+            </div>
+          </div>
+          <label class="attachment-picker field"><i data-lucide="upload" aria-hidden="true"></i><strong>Adicionar
+              arquivos ao rascunho</strong><span>PDF, PNG ou JPEG · até 10 MB por arquivo</span><input
+              id="attachment-files" type="file" accept=".pdf,.png,.jpg,.jpeg" multiple></label>
+          <p class="field-note">Os arquivos ficam apenas nesta aba. O JSON contém seus nomes e tamanhos, sem o conteúdo
+            dos arquivos.</p>
+          <p class="form-alert" id="attachment-alert" role="alert" hidden></p>
+          <div class="table-scroll" role="region" aria-label="Anexos selecionados" tabindex="0">
+            <table>
+              <caption>Arquivos selecionados</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Arquivo</th>
+                  <th scope="col">Tamanho</th>
+                  <th scope="col">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="attachments-body"></tbody>
+            </table>
+          </div>
+        </section>
+        {% for key, label, icon in [('baixas','Baixas','package-check'), ('cotacoes','Cotações','tags')] %}
+        <section class="editor-panel" role="tabpanel" id="panel-{{ key }}" aria-labelledby="tab-{{ key }}" tabindex="0"
+          hidden>
+          <div class="empty-state"><i data-lucide="{{ icon }}" aria-hidden="true"></i>
+            <h2>{{ label }}</h2>
+            <p>Esta etapa será detalhada após recebermos a referência dos campos e do fluxo.</p>
+            <p>O rascunho não possui registros de {{ label|lower }}.</p>
+          </div>
+        </section>
+        {% endfor %}
+        <p id="editor-feedback" role="status" class="field-note"></p>
+        <div data-layout="footer" data-component-url="{{ url_for('component', filename='footer.html') }}"></div>
+      </main>
+    </div>
+  </div>
+  <dialog class="profile-dialog lookup-dialog" id="lookup-dialog" aria-labelledby="lookup-title">
+    <div class="profile-form">
+      <div class="profile-heading">
+        <h2 id="lookup-title">Consultar</h2><button class="icon-button" type="button" data-close="lookup-dialog"
+          aria-label="Fechar consulta"><i data-lucide="x" aria-hidden="true"></i></button>
+      </div>
+      <p id="lookup-note">Selecione um exemplo para preencher o campo.</p><label class="field"><span>Buscar por código
+          ou descrição</span><input id="lookup-search" type="search" autocomplete="off"
+          placeholder="Digite para filtrar…"></label>
+      <div id="lookup-results" class="lookup-results"></div>
+    </div>
+  </dialog>
+  <dialog class="profile-dialog review-dialog" id="review-dialog" aria-labelledby="review-title">
+    <div class="profile-form">
+      <div class="profile-heading">
+        <h2 id="review-title">Revisão do rascunho</h2><button type="button" class="icon-button"
+          data-close="review-dialog" aria-label="Fechar revisão"><i data-lucide="x" aria-hidden="true"></i></button>
+      </div>
+      <p id="review-message"></p>
+      <div id="review-content"></div>
+      <div class="profile-actions"><button type="button" class="clear-button" data-close="review-dialog">Continuar
+          editando</button><button type="button" class="primary-link" id="review-download"><i data-lucide="download"
+            aria-hidden="true"></i> Baixar modelo JSON</button></div>
+    </div>
+  </dialog>
+  <dialog class="profile-dialog attachment-dialog" id="attachment-dialog" aria-labelledby="attachment-title">
+    <div class="profile-form">
+      <div class="profile-heading">
+        <h2 id="attachment-title">Visualizar anexo</h2><button class="icon-button" type="button"
+          data-close="attachment-dialog" aria-label="Fechar anexo"><i data-lucide="x" aria-hidden="true"></i></button>
+      </div>
+      <div id="attachment-preview"></div><a class="subtle-link" id="attachment-download">Baixar arquivo original</a>
+    </div>
+  </dialog>
+  <noscript>
+    <p class="layout-error">Ative o JavaScript para consultar os campos e montar o rascunho.</p>
+  </noscript>
+</body>
+
+</html>

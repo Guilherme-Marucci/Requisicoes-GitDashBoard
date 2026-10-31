@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <title>{% block page_title %}Painel TV{% endblock %} · Requisições Supersonic</title>
+  <link rel="icon" href="{{ url_for('static', filename='img/supersonic-mark.svg') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/global.css', v='6') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/tv.css', v='6') }}">
+  <script src="{{ url_for('static', filename='js/vendor/lucide-1.49.0.min.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/layout.js', v='10') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/requisicoes-status.js', v='2') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/tv.js', v='9') }}" defer></script>
+</head>
+
+<body class="tv" data-tv-view="{{ 'graph' if is_graph else 'summary' }}"
+  data-requests-url="{{ url_for('tv_dataset', alvo='situacoes') }}"
+  data-orders-url="{{ url_for('tv_dataset', alvo='pedidos') }}">
+  <header class="tv-header">
+    {% if is_tv_only %}
+    <div class="tv-brand" aria-label="Supersonic — Painel TV">
+      <img class="brand__logo brand__logo--light"
+        src="{{ url_for('static', filename='img/supersonic-horizontal-light.png') }}" alt="Supersonic">
+      <img class="brand__logo brand__logo--dark"
+        src="{{ url_for('static', filename='img/supersonic-horizontal-dark.png') }}" alt="Supersonic">
+    </div>
+    {% else %}
+    <a class="tv-brand" href="{{ url_for('index') }}" aria-label="Voltar ao painel">
+      <img class="brand__logo brand__logo--light"
+        src="{{ url_for('static', filename='img/supersonic-horizontal-light.png') }}" alt="Supersonic">
+      <img class="brand__logo brand__logo--dark"
+        src="{{ url_for('static', filename='img/supersonic-horizontal-dark.png') }}" alt="Supersonic">
+    </a>
+    {% endif %}
+    <div class="tv-heading"><span>COMPRAS &amp; MANUTENÇÃO</span>
+      <h1>Requisições</h1>
+    </div>
+    <div class="tv-clock"><time id="tv-clock">—</time><span>PAINEL TV</span></div>
+    <nav class="tv-controls" aria-label="Controles da apresentação">
+      {% if is_graph %}
+      <a class="icon-button" href="{{ url_for('tv') }}" aria-label="Voltar ao Painel TV" title="Painel TV"><i data-lucide="layout-dashboard"></i></a>
+      {% endif %}
+      {% if not is_graph %}
+      <button class="icon-button" id="tv-next" type="button" aria-label="Avançar para a próxima tela" title="Avançar tela"><i
+          data-lucide="skip-forward"></i></button>
+      {% endif %}
+      <button class="theme-button" id="theme-toggle" type="button" aria-label="Alternar tema" title="Alternar tema"><i
+          data-lucide="sun"></i></button>
+      <button class="icon-button" id="tv-fullscreen" type="button" aria-label="Tela cheia" title="Tela cheia"><i
+          data-lucide="maximize"></i></button>
+      <a class="icon-button" href="{{ url_for('logout') }}" aria-label="Encerrar sessão" title="Sair"><i
+          data-lucide="log-out"></i></a>
+    </nav>
+  </header>
+  <main id="conteudo" class="tv-main">
+    <div class="tv-section-heading">
+      <div><span id="tv-kicker">01 / VISÃO GERAL</span>
+        <h2 id="tv-title">Situações das requisições</h2>
+      </div>
+      <p id="tv-pagination">Todos os registros</p>
+    </div>
+    {% block overview %}
+    <section id="tv-summary-screen" class="tv-summary-screen" aria-label="Visão geral de requisições e pedidos">
+      <div class="tv-summary" id="tv-summary">
+        <div class="tv-latest-info">
+          <div class="tv-latest-header">
+            <span>Última requisição cadastrada</span>
+            <span class="tv-latest-date" id="tv-latest-date"></span>
+          </div>
+          <strong id="tv-total">Carregando…</strong>
+        </div>
+        <div class="tv-pending-summary"><span id="tv-pending-note">Requisições pendentes</span><strong id="tv-pending">—</strong></div>
+      </div>
+      <div class="tv-summary" id="tv-orders-summary" aria-labelledby="tv-orders-title">
+        <div class="tv-latest-info">
+          <div class="tv-latest-header">
+            <span id="tv-orders-title">Último pedido registrado</span>
+            <span class="tv-latest-date" id="tv-orders-latest-date"></span>
+          </div>
+          <strong id="tv-orders-total">Carregando…</strong>
+        </div>
+        <div class="tv-pending-summary"><span id="tv-orders-pending-note">Pedidos pendentes</span><strong id="tv-orders-pending">—</strong></div>
+      </div>
+      <section class="tv-placeholder tv-placeholder--wide" aria-labelledby="tv-invoices-title"><h3 id="tv-invoices-title">Finalizados / NF</h3></section>
+    </section>
+    {% endblock %}
+    {% block details %}
+    <section id="tv-table-screen" class="tv-table-screen" aria-label="Lista de requisições" hidden>
+      <div class="tv-table-wrap">
+        <table class="tv-table">
+          <caption class="sr-only">Requisições da última coleta válida</caption>
+          <colgroup>
+            <col class="tv-col-code">
+            <col class="tv-col-branch">
+            <col class="tv-col-product">
+            <col class="tv-col-name">
+            <col class="tv-col-note">
+            <col class="tv-col-status">
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">Requisição</th>
+              <th scope="col">Filial</th>
+              <th scope="col">1º produto</th>
+              <th scope="col">Solicitante</th>
+              <th scope="col">Observação</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody id="tv-rows"></tbody>
+        </table>
+      </div>
+    </section>
+    {% endblock %}
+    {% block chart %}
+    <section id="tv-chart-screen" class="tv-chart-screen" aria-label="Gráfico de situações" hidden>
+      <div id="tv-chart" class="tv-chart" aria-label="Quantidades por situação"></div>
+    </section>
+    {% endblock %}
+    <p id="tv-empty" class="tv-empty">Carregando a última coleta…</p>
+  </main>
+  <footer class="tv-footer">
+    <p id="tv-data-state" role="status">Aguardando dados</p>
+    <span id="tv-screen-label">{{ 'Gráfico de situações' if is_graph else 'Tela 1 de 3' }}</span>
+    {% if not is_graph %}
+    <div class="tv-progress" aria-hidden="true"><span id="tv-progress-fill"></span></div>
+    {% endif %}
+  </footer>
+  <noscript>Ative o JavaScript para exibir os dados e alternar as telas.</noscript>
+</body>
+
+</html>

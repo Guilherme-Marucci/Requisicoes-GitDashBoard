@@ -1,0 +1,346 @@
+/* Composição do acesso; a base e as cores permanecem nos estilos globais. */
+.access-page {
+  background: var(--page);
+}
+.access-shell,
+.access-main {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+.access-main {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(500px, 3fr);
+}
+
+/* Área institucional sem fotografia, conforme a referência aprovada. */
+.access-intro {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding: clamp(32px, 4vw, 64px);
+  background: var(--ss-brand-night);
+  color: var(--ss-white);
+}
+.access-intro .eyebrow {
+  margin: 0;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: var(--ss-brand-day);
+  color: var(--ss-brand-night);
+}
+.access-intro h2 {
+  margin: 18px 0 22px;
+  font-size: clamp(36px, 3.5vw, 60px);
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+}
+.access-intro h2 > span {
+  color: var(--ss-brand-day);
+}
+.access-lead {
+  max-width: 680px;
+  margin: 0;
+  color: var(--ss-on-night-text);
+  font-size: 17px;
+  line-height: 1.7;
+}
+.access-form-area {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+  padding: 40px 32px;
+}
+.access-card {
+  --control-height: 48px;
+  width: 100%;
+  max-width: 440px;
+  min-width: 0;
+  padding: 36px 40px 28px;
+  border: 1px solid var(--line-soft);
+  border-radius: 12px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+.access-header {
+  text-align: center;
+}
+.access-header .brand {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+  padding: 0;
+  margin-bottom: 24px;
+}
+.access-header .brand__logo {
+  width: 180px;
+  max-width: 100%;
+}
+.access-card h1 {
+  margin: 0 0 6px;
+  font-size: 25px;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+.access-description {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.access-highlights {
+  list-style: none;
+  padding: 0;
+  margin: 24px 0;
+  display: grid;
+  gap: 14px;
+}
+.access-highlights li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.access-highlights li > span {
+  padding-top: 2px;
+  color: var(--accent);
+}
+.access-highlights strong {
+  font-size: 13px;
+}
+.access-highlights p {
+  margin: 3px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* Alertas de erro e confirmação compatíveis com os temas claro e escuro. */
+.access-card > .form-alert,
+.profile-form > .form-alert {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--ss-error-border);
+  border-radius: 8px;
+  background: var(--ss-error-surface);
+  color: var(--ss-danger);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+.access-card > .form-info {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--ss-success);
+  border-radius: 8px;
+  background: var(--ss-success-surface);
+  color: var(--ss-success);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+.access-card input[aria-invalid="true"],
+.profile-form input[aria-invalid="true"] {
+  border-color: var(--ss-danger);
+}
+
+.access-card form {
+  display: grid;
+  gap: 8px;
+}
+.access-card .field > span {
+  color: var(--text);
+  font-size: 12px;
+}
+.access-card .field input {
+  min-width: 0;
+  padding-left: 40px;
+  font-size: 16px;
+}
+.access-card label[for="login-password"] {
+  margin-top: 12px;
+}
+.access-input {
+  position: relative;
+}
+.access-input > .lucide {
+  position: absolute;
+  top: 50%;
+  left: 13px;
+  width: 19px;
+  height: 19px;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+}
+.access-password input {
+  padding-right: 98px;
+}
+.access-password .clear-button {
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  bottom: 3px;
+  min-height: 0;
+  padding: 0 9px;
+  border: 0;
+}
+.access-submit {
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  min-height: 50px;
+  margin-top: 14px;
+  border: 1px solid transparent;
+  font-size: 14px;
+}
+.access-submit:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+.access-register {
+  display: flex;
+  width: fit-content;
+  margin: 18px auto 0;
+}
+.access-register,
+.access-recovery {
+  border: 0;
+  padding: 0 4px;
+  color: var(--accent);
+}
+.access-recovery {
+  justify-self: end;
+}
+.access-register:hover,
+.access-recovery:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.access-page:has(.access-dialog[open]) {
+  overflow: hidden;
+}
+.access-dialog {
+  width: min(460px, calc(100% - 32px));
+  border-radius: 14px;
+}
+.access-dialog::backdrop {
+  background: var(--page);
+}
+.access-dialog .profile-form {
+  position: relative;
+  gap: 16px;
+  padding: 36px 36px 28px;
+}
+.access-dialog-header {
+  text-align: center;
+}
+.access-dialog-header h2 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.25;
+}
+.access-dialog-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border: 0;
+  background: transparent;
+}
+.access-dialog .profile-form > p {
+  margin: 0;
+}
+.access-dialog [id$="-description"] {
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.access-dialog .field > span {
+  color: var(--text);
+  font-size: 12px;
+}
+.access-dialog .field input {
+  padding-left: 40px;
+  font-size: 15px;
+  font-weight: 400;
+}
+.access-dialog .access-input {
+  display: block;
+}
+.access-dialog-actions {
+  display: grid;
+  gap: 14px;
+}
+.access-dialog .access-submit {
+  width: 100%;
+  margin: 0;
+}
+.access-dialog-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  border-top: 1px solid var(--line-soft);
+  border-radius: 0;
+  padding-top: 14px;
+  color: var(--accent);
+}
+.access-card .footer {
+  margin-top: 16px;
+  padding: 14px 0 0;
+  text-align: center;
+  line-height: 1.7;
+}
+.access-card .footer-content {
+  margin: 8px 0 0;
+  padding: 0;
+}
+
+@media (max-width: 1000px) {
+  .access-main {
+    grid-template-columns: 1fr;
+  }
+  .access-intro {
+    min-height: 280px;
+    padding: 40px 32px;
+  }
+  .access-intro h2 {
+    font-size: 36px;
+    margin: 16px 0;
+  }
+  .access-intro h2 br {
+    display: none;
+  }
+  .access-form-area {
+    padding: 32px 24px;
+  }
+  .access-card {
+    max-width: 480px;
+  }
+}
+@media (max-width: 450px) {
+  .access-dialog .profile-form {
+    padding: 32px 20px 24px;
+  }
+  .access-intro {
+    min-height: 240px;
+    padding: 32px 24px;
+  }
+  .access-intro h2 {
+    font-size: 32px;
+  }
+  .access-lead {
+    font-size: 14px;
+  }
+  .access-form-area {
+    padding: 24px 16px;
+  }
+  .access-card {
+    padding: 28px 20px 24px;
+  }
+  .access-card h1 {
+    font-size: 24px;
+  }
+}

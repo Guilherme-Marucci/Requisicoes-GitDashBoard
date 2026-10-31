@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <meta name="description" content="Acompanhamento de requisições por etapas e setores, com filtros, detalhes e histórico.">
+  <title>Painel de requisições · Supersonic</title>
+  <link rel="icon" href="{{ url_for('static', filename='img/supersonic-mark.svg') }}" type="image/svg+xml">
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/global.css', v='6') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/styles.css', v='11') }}">
+  <script src="{{ url_for('static', filename='js/vendor/lucide-1.49.0.min.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/layout.js', v='10') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/requisicoes-status.js', v='2') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/requisicoes-fluxo.js', v='1') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/rankings.js', v='1') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/app.js', v='13') }}" defer></script>
+</head>
+
+<body data-page-title="Requisições" data-page="dashboard"
+  data-user-name="{{ current_user.name if current_user else '' }}"
+  data-requests-url="{{ url_for('requests_snapshot') }}">
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <div class="app-shell">
+    <!-- Os templates globais são montados por layout.js antes das interações da página. -->
+    <div data-layout="sidebar" data-component-url="{{ url_for('component', filename='sidebar.html') }}"></div>
+
+    <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+
+    <div class="app-main">
+      <div data-layout="topbar" data-component-url="{{ url_for('component', filename='topbar.html') }}"></div>
+
+      <main class="content" id="conteudo">
+        <section class="hero" aria-labelledby="page-title">
+          <div class="hero__copy">
+            <div class="eyebrow">COMPRAS &amp; MANUTENÇÃO</div>
+            <h1 id="page-title">Painel de requisições<span>.</span></h1>
+            <p>Acompanhe as requisições por etapa ou setor, encontre um código e consulte os detalhes do processo.</p>
+          </div>
+        </section>
+
+        <section class="metrics" aria-label="Resumo das requisições">
+          <div class="metric"><span>Requisições na coleta</span><strong id="metric-total">—</strong><small>Registros recebidos</small></div>
+          <div class="metric"><span>Setores identificados</span><strong id="metric-sectors">—</strong><small>Blocos
+              separados</small></div>
+          <div class="metric metric--accent"><span>Situações pendentes</span><strong
+              id="metric-pending">—</strong><small id="pending-description">Requisições com situação Pendente</small></div>
+        </section>
+
+        <section class="section requisitions-section" id="setores" aria-labelledby="sector-heading" aria-busy="true">
+          <div class="section__header">
+            <div>
+              <div class="section__eyebrow">01 / ACOMPANHAMENTO</div>
+              <h2 id="sector-heading">Fluxo de requisições</h2>
+              <p>Clique em um cartão para ver os detalhes da requisição.</p>
+            </div>
+          </div>
+
+          <div class="data-state" id="data-state" data-state="loading">
+            <p id="data-message" role="status" aria-live="polite">Carregando a última coleta…</p>
+            <button class="clear-button" id="reload-data" type="button" disabled><i data-lucide="refresh-cw" aria-hidden="true"></i> Recarregar dados</button>
+          </div>
+          <div class="toolbar" role="search" aria-label="Filtros das requisições">
+            <label class="field field--search"><span>Código da requisição</span><input id="search-input" type="search"
+                placeholder="Digite o código da requisição…" autocomplete="on"></label>
+            <label class="field"><span>Setor</span><select id="sector-filter">
+                <option value="">Todos os setores</option>
+              </select></label>
+            <label class="field"><span>Situação</span><select id="status-filter">
+                <option value="">Todas as situações</option>
+              </select></label>
+            <label class="field"><span>Filial</span><select id="branch-filter"><option value="">Todas as filiais</option></select></label>
+            <label class="field"><span>Data inicial</span><input id="date-start-filter" type="date" aria-label="Filtrar por data inicial"></label>
+            <label class="field"><span>Data final</span><input id="date-end-filter" type="date" aria-label="Filtrar por data final"></label>
+            <button class="clear-button" id="clear-filters" type="button"><i data-lucide="filter-x" aria-hidden="true"></i> Limpar filtros</button>
+          </div>
+
+          <div class="view-toolbar">
+            <div class="view-switch" role="group" aria-label="Visualização das requisições">
+              <button type="button" data-view="kanban" aria-pressed="true"><i data-lucide="columns-3" aria-hidden="true"></i> Por etapas</button>
+              <button type="button" data-view="sector" aria-pressed="false"><i data-lucide="layers" aria-hidden="true"></i> Por setor</button>
+              <button type="button" data-view="rankings" aria-pressed="false"><i data-lucide="bar-chart-3" aria-hidden="true"></i> Rankings</button>
+            </div>
+            <label class="attention-filter"><input type="checkbox" id="attention-filter"> Somente pendências / revisão</label>
+          </div>
+
+          <div class="legend" id="status-legend" aria-label="Legenda de situações"></div>
+          <div class="results-bar">
+            <p id="results-count" role="status" aria-live="polite"></p>
+            <div class="results-bar__actions"><button id="expand-all" type="button"><i data-lucide="chevrons-down" aria-hidden="true"></i> Expandir todos</button><button
+                id="collapse-all" type="button"><i data-lucide="chevrons-up" aria-hidden="true"></i> Recolher todos</button></div>
+          </div>
+          <div class="kanban-navigation" id="kanban-navigation" hidden role="group" aria-label="Navegar entre etapas">
+            <button type="button" id="previous-stage" aria-label="Ver etapas anteriores" aria-controls="sector-list"><i data-lucide="chevron-left" aria-hidden="true"></i></button>
+            <button type="button" id="next-stage" aria-label="Ver próximas etapas" aria-controls="sector-list"><i data-lucide="chevron-right" aria-hidden="true"></i></button>
+            <span>Deslize ou use as setas para ver todas as etapas.</span>
+          </div>
+          <div id="sector-list" class="sector-list" role="region" aria-label="Requisições agrupadas" tabindex="0"></div>
+          <div class="load-more-wrap" id="load-more-wrap" hidden>
+            <button type="button" class="load-more-button" id="load-more-btn">
+              <i data-lucide="plus-circle" aria-hidden="true"></i> Carregar mais requisições (+20)
+            </button>
+            <p class="load-more-info" id="load-more-info"></p>
+          </div>
+          <div class="empty-state" id="empty-state" hidden><span aria-hidden="true"><i data-lucide="search-x" aria-hidden="true"></i></span>
+            <h3>Nenhuma requisição encontrada</h3>
+            <p>Ajuste a busca ou limpe os filtros para voltar à visão completa.</p><button id="empty-reset"
+              type="button"><i data-lucide="filter-x" aria-hidden="true"></i> Limpar filtros</button>
+          </div>
+        </section>
+
+        <div data-layout="footer" data-component-url="{{ url_for('component', filename='footer.html') }}"></div>
+      </main>
+    </div>
+  </div>
+  <noscript>Ative o JavaScript para carregar a navegação, os temas, os filtros e os cartões interativos deste
+    painel.</noscript>
+</body>
+
+</html>

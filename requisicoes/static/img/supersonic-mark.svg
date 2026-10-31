@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="499 79 217 217" role="img" aria-labelledby="title">
+  <title id="title">Supersonic</title>
+  <style>.night { fill: #394f5a; } @media (prefers-color-scheme: dark) { .night { fill: #fff; } }</style>
+  <!-- Polígonos originais extraídos de Logo-01.svg. -->
+  <polygon fill="#14b1e7" points="559.71 289.24 626.94 289.24 702.25 213.93 677.18 171.77 559.71 289.24"/>
+  <polygon class="night" points="654.9 133.99 607.23 133.99 607.23 187.88 686.82 187.88 654.9 133.99"/>
+  <polygon fill="#14b1e7" points="654.74 86.52 587.51 86.52 512.2 161.83 537.27 203.99 654.74 86.52"/>
+  <polygon class="night" points="559.55 241.77 607.21 241.77 607.21 187.88 527.63 187.88 559.55 241.77"/>
+</svg>

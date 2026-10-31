@@ -1,0 +1,4 @@
+# Dependências do coletor SQL Server; o driver ODBC 18 é instalado no sistema.
+-r requirements.txt
+pyodbc==5.3.0
+

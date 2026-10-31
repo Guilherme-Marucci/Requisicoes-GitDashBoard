@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Configurações{% endblock %}
+{% block crumb %}Configurações do usuário{% endblock %}
+{% block content %}
+<section class="hero"><div><div class="eyebrow">CONTA</div><h1>Configurações do usuário<span class="dot">.</span></h1></div></section>
+
+<section class="panel">
+  <h2 class="panel__title">Tema</h2>
+  <p class="muted">A escolha é aplicada na hora e salva no seu perfil.</p>
+  <div class="themes" id="theme-picker" role="radiogroup" aria-label="Tema">
+    {% for t in temas %}
+    <button type="button" class="theme-chip {{ 'is-active' if t == tema_atual }}" data-theme-choice="{{ t }}" role="radio" aria-checked="{{ 'true' if t == tema_atual else 'false' }}">
+      <i class="swatch swatch--{{ t }}"></i>{{ t }}</button>
+    {% endfor %}
+  </div>
+  <p class="muted" id="theme-feedback" role="status"></p>
+</section>
+
+<section class="grid-2">
+  <form class="panel stack" method="post" action="{{ url_for('config.salvar_perfil') }}">
+    <h2 class="panel__title">Perfil</h2>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label class="field"><span>Nome de exibição</span><input name="nome" value="{{ current_user.nome }}" required minlength="2" maxlength="120"></label>
+    <label class="field"><span>Usuário</span><input value="{{ current_user.username }}" disabled></label>
+    <label class="field"><span>E-mail</span><input value="{{ current_user.email }}" disabled></label>
+    <label class="field"><span>Username GitHub padrão</span><input name="github_username" value="{{ current_user.github_username or '' }}" maxlength="200"></label>
+    <button class="btn btn--primary" type="submit">Salvar perfil</button>
+  </form>
+  <form class="panel stack" method="post" action="{{ url_for('config.alterar_senha') }}" autocomplete="off">
+    <h2 class="panel__title">Alterar senha</h2>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label class="field"><span>Senha atual</span><input type="password" name="senha_atual" required autocomplete="current-password"></label>
+    <label class="field"><span>Nova senha (mín. 10, letras e números)</span><input type="password" name="senha_nova" required minlength="10" autocomplete="new-password"></label>
+    <label class="field"><span>Confirmar nova senha</span><input type="password" name="senha_confirma" required minlength="10" autocomplete="new-password"></label>
+    <button class="btn btn--primary" type="submit">Alterar senha</button>
+  </form>
+</section>
+{% endblock %}
+

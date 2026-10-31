@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Projetos GitHub{% endblock %}
+{% block crumb %}Projetos GitHub{% endblock %}
+{% block content %}
+<section class="hero"><div><div class="eyebrow">PORTFÓLIO</div><h1>Projetos GitHub<span class="dot">.</span></h1>
+  <p>Informe um username ou link de perfil. Os repositórios públicos são coletados pela API do GitHub e cada sincronização gera um log de auditoria.</p></div></section>
+
+<section class="panel">
+  <form class="gh-form" id="gh-form" novalidate>
+    <label class="field field--wide"><span>Username ou link do GitHub</span>
+      <input id="gh-input" name="entrada" placeholder="ex.: Guilherme-Marucci ou https://github.com/Guilherme-Marucci"
+             value="{{ current_user.github_username or '' }}" maxlength="200" autocomplete="off" required></label>
+    <button class="btn btn--primary" id="gh-submit" type="submit">⟳ Sincronizar</button>
+  </form>
+  <div class="flash flash--info" id="gh-status" role="status" hidden></div>
+</section>
+
+<section id="gh-dashboard" hidden>
+  <div class="metrics" id="gh-metrics"></div>
+  <div class="grid-2">
+    <div class="panel"><h2 class="panel__title">Commits por dia <small class="muted">(últimos 30 dias, eventos públicos)</small></h2>
+      <canvas id="chart-atividade" class="chart" height="220" aria-label="Gráfico de commits por dia" role="img"></canvas></div>
+    <div class="panel"><h2 class="panel__title">Linguagens <small class="muted">(repositórios)</small></h2>
+      <canvas id="chart-linguagens" class="chart" height="220" aria-label="Gráfico de linguagens" role="img"></canvas>
+      <ul class="legend" id="legend-linguagens"></ul></div>
+  </div>
+  <div class="grid-2">
+    <div class="panel"><h2 class="panel__title">Estrelas por repositório <small class="muted">(top 8)</small></h2>
+      <canvas id="chart-estrelas" class="chart" height="220" aria-label="Estrelas por repositório" role="img"></canvas></div>
+    <div class="panel"><h2 class="panel__title">Forks por repositório <small class="muted">(top 8)</small></h2>
+      <canvas id="chart-forks" class="chart" height="220" aria-label="Forks por repositório" role="img"></canvas></div>
+  </div>
+  <div class="panel"><h2 class="panel__title">Repositórios</h2>
+    <div class="table-wrap"><table class="table" id="gh-table">
+      <thead><tr><th>Repositório</th><th>Linguagem</th><th>★</th><th>Forks</th><th>Issues</th><th>Commits (30d)</th><th>Último push</th></tr></thead>
+      <tbody></tbody></table></div></div>
+</section>
+
+<section class="panel">
+  <div class="panel__head"><h2 class="panel__title">Log de sincronizações</h2>
+    {% if pode_ver_todos %}<label class="check"><input type="checkbox" id="logs-todos"> Todos os usuários</label>{% endif %}</div>
+  <div class="table-wrap"><table class="table" id="log-table">
+    <thead><tr><th>Quando</th><th>Usuário GitHub</th><th>Resultado</th><th>Repos</th><th>★</th><th>Forks</th><th>Commits</th><th>Limite restante</th><th>Mensagem</th>{% if pode_ver_todos %}<th>Por</th>{% endif %}</tr></thead>
+    <tbody></tbody></table></div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/charts.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/github.js') }}" defer></script>{% endblock %}
+

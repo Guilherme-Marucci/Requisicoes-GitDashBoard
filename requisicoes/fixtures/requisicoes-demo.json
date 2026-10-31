@@ -1,0 +1,134 @@
+[
+  {
+    "id": "20101",
+    "sector": "operations",
+    "status": "registered",
+    "branch": "10",
+    "title": "Materiais de embalagem para a operação",
+    "description": "Reposição de insumos para a área operacional. Registro demonstrativo sem vínculo com o ERP.",
+    "reference": "24/09/2026",
+    "deadline": "29/09/2026",
+    "item": "Insumos de embalagem"
+  },
+  {
+    "id": "20102",
+    "sector": "operations",
+    "status": "pending",
+    "branch": "10",
+    "title": "Reposição de fitas para expedição",
+    "description": "Solicitação fictícia de material de uso recorrente da expedição.",
+    "reference": "24/09/2026",
+    "deadline": "30/09/2026",
+    "item": "Fita adesiva"
+  },
+  {
+    "id": "20103",
+    "sector": "operations",
+    "status": "quotation",
+    "branch": "05",
+    "title": "Equipamentos de apoio à separação",
+    "description": "Exemplo de cartão com acompanhamento de cotação, sem preço ou fornecedor real.",
+    "reference": "23/09/2026",
+    "deadline": "02/10/2026",
+    "item": "Equipamento de apoio"
+  },
+  {
+    "id": "20104",
+    "sector": "maintenance",
+    "status": "approved",
+    "branch": "05",
+    "title": "Componentes para manutenção preventiva",
+    "description": "Peças e materiais descritos de forma resumida. O detalhamento de itens dependerá do contrato com o Rodopar.",
+    "reference": "23/09/2026",
+    "deadline": "30/09/2026",
+    "item": "Componentes diversos"
+  },
+  {
+    "id": "20105",
+    "sector": "maintenance",
+    "status": "partial",
+    "branch": "01",
+    "title": "Serviços de revisão de equipamentos",
+    "description": "O rótulo “Parcial” é visual. Seu significado operacional ainda precisa ser confirmado.",
+    "reference": "22/09/2026",
+    "deadline": "03/10/2026",
+    "item": "Serviço de revisão"
+  },
+  {
+    "id": "20106",
+    "sector": "maintenance",
+    "status": "released",
+    "branch": "01",
+    "title": "Ferramentas para equipe técnica",
+    "description": "Exemplo de requisição liberada, sem presumir entrega, pagamento ou baixa.",
+    "reference": "22/09/2026",
+    "deadline": "01/10/2026",
+    "item": "Ferramentas manuais"
+  },
+  {
+    "id": "20107",
+    "sector": "facilities",
+    "status": "rejected",
+    "branch": "04",
+    "title": "Adequações no espaço de apoio",
+    "description": "Registro fictício usado para mostrar a cor e a leitura de uma situação reprovada.",
+    "reference": "20/09/2026",
+    "deadline": "Não informado",
+    "item": "Serviço predial"
+  },
+  {
+    "id": "20108",
+    "sector": "facilities",
+    "status": "canceled",
+    "branch": "04",
+    "title": "Materiais para pequena reforma",
+    "description": "Exemplo cancelado. Não há motivo ou histórico de cancelamento real nesta prévia.",
+    "reference": "20/09/2026",
+    "deadline": "Não informado",
+    "item": "Materiais prediais"
+  },
+  {
+    "id": "20109",
+    "sector": "technology",
+    "status": "closed",
+    "branch": "01",
+    "title": "Periféricos para estação de trabalho",
+    "description": "O estado ilustrativo “Baixado” não indica pagamento nem confirma recebimento.",
+    "reference": "19/09/2026",
+    "deadline": "Não informado",
+    "item": "Periféricos"
+  },
+  {
+    "id": "20110",
+    "sector": "technology",
+    "status": "pending",
+    "branch": "10",
+    "title": "Suporte de rede para unidade",
+    "description": "Solicitação demonstrativa de suporte técnico e peças de infraestrutura.",
+    "reference": "24/09/2026",
+    "deadline": "28/09/2026",
+    "item": "Componentes de rede"
+  },
+  {
+    "id": "20111",
+    "sector": "supply",
+    "status": "quotation",
+    "branch": "16",
+    "title": "Materiais de limpeza e consumo",
+    "description": "Exemplo de requisição em cotação, com itens resumidos para a primeira visualização.",
+    "reference": "24/09/2026",
+    "deadline": "05/10/2026",
+    "item": "Materiais de consumo"
+  },
+  {
+    "id": "20112",
+    "sector": "supply",
+    "status": "approved",
+    "branch": "19",
+    "title": "Água para área administrativa",
+    "description": "Requisição fictícia para validar o agrupamento por setor e as cores de situação.",
+    "reference": "21/09/2026",
+    "deadline": "30/09/2026",
+    "item": "Galões de água"
+  }
+]

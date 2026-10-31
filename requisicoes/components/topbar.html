@@ -1,0 +1,43 @@
+<header class="topbar" id="inicio">
+  <div class="topbar__left">
+    <button class="icon-button mobile-menu" id="menu-toggle" type="button" aria-controls="sidebar" aria-expanded="false"
+      aria-label="Abrir menu"><i data-lucide="menu" aria-hidden="true"></i></button>
+    <div class="breadcrumb">Compras <span aria-hidden="true">/</span> <strong>Requisições</strong></div>
+  </div>
+  <div class="topbar__right">
+    <button class="theme-button" id="theme-toggle" type="button" aria-label="Ativar tema claro"><i data-lucide="sun"
+        aria-hidden="true"></i><span>Tema claro</span></button>
+    <button class="user-avatar" id="profile-toggle" type="button" aria-label="Ajustar perfil" aria-haspopup="dialog"
+      aria-controls="profile-dialog" title="Ajustar perfil"><i data-lucide="user-round" aria-hidden="true"></i></button>
+  </div>
+</header>
+<dialog class="profile-dialog" id="profile-dialog" aria-labelledby="profile-title"
+  aria-describedby="profile-description">
+  <form class="profile-form" id="profile-form">
+    <div class="profile-heading">
+      <h2 id="profile-title">Ajustes do perfil</h2>
+      <button class="icon-button" id="profile-close" type="button" aria-label="Fechar ajustes do perfil"><i
+          data-lucide="x" aria-hidden="true"></i></button>
+    </div>
+    <p id="profile-description">As preferências visuais ficam salvas neste navegador.</p>
+    <label class="field">
+      <span>Nome de exibição</span>
+      <input id="profile-name" name="displayName" type="text" maxlength="60" required autocomplete="off">
+    </label>
+    <label class="field">
+      <span>Aparência</span>
+      <select id="profile-theme" name="theme">
+        <option value="dark">Tema escuro</option>
+        <option value="light">Tema claro</option>
+      </select>
+    </label>
+    <div class="profile-actions">
+      <button class="clear-button" id="profile-cancel" type="button"><i data-lucide="x" aria-hidden="true"></i>
+        Cancelar</button>
+      <button class="primary-link" type="submit"><i data-lucide="save" aria-hidden="true"></i> Salvar
+        preferências</button>
+    </div>
+    <a class="logout" href="/logout"><i data-lucide="log-out" aria-hidden="true"></i><span>Logout</span></a>
+  </form>
+</dialog>
+<p class="profile-feedback" id="profile-feedback" role="status" aria-live="polite" hidden></p>

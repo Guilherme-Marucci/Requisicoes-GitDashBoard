@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <meta name="description" content="Acompanhamento de pedidos vinculados às requisições, métricas financeiras e comparativo mensal.">
+  <title>Acompanhamento de Pedidos · Supersonic</title>
+  <link rel="icon" href="{{ url_for('static', filename='img/supersonic-mark.svg') }}" type="image/svg+xml">
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/global.css', v='6') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/styles.css', v='12') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/pedidos.css', v='1') }}">
+  <script src="{{ url_for('static', filename='js/vendor/lucide-1.49.0.min.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/layout.js', v='10') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/pedidos.js', v='2') }}" defer></script>
+</head>
+
+<body data-page-title="Acompanhamento de Pedidos" data-page="orders"
+  data-user-name="{{ current_user.name if current_user else '' }}"
+  data-orders-url="{{ url_for('pedidos_list_endpoint') }}"
+  data-metrics-url="{{ url_for('pedidos_metrics_endpoint') }}">
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <div class="app-shell">
+    <div data-layout="sidebar" data-component-url="{{ url_for('component', filename='sidebar.html') }}"></div>
+    <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+
+    <div class="app-main">
+      <div data-layout="topbar" data-component-url="{{ url_for('component', filename='topbar.html') }}"></div>
+
+      <main class="content" id="conteudo">
+        <section class="hero" aria-labelledby="page-title">
+          <div class="hero__copy">
+            <div class="eyebrow">COMPRAS &amp; SUPRIMENTOS</div>
+            <h1 id="page-title">Acompanhamento de Pedidos<span>.</span></h1>
+            <p>Monitore os itens de pedido (ESTIPE / ESTPED) vinculados às requisições, indicadores financeiros e entregas dos últimos 3 meses.</p>
+          </div>
+        </section>
+
+        <div class="data-state orders-data-state" id="orders-data-state" data-state="loading">
+          <p id="orders-data-message" role="status" aria-live="polite">Carregando coleta de pedidos…</p>
+          <button class="clear-button" id="orders-reload" type="button" disabled>
+            <i data-lucide="refresh-cw" aria-hidden="true"></i> Recarregar dados
+          </button>
+        </div>
+
+        <!-- KPIs Financeiros e Operacionais -->
+        <section class="orders-kpis" aria-label="Indicadores de pedidos">
+          <article class="metric">
+            <span>Total comprado (período)</span>
+            <strong id="kpi-total-purchased">—</strong>
+            <small id="kpi-total-sub">Soma de itens ativos no recorte</small>
+          </article>
+          <article class="metric metric--accent">
+            <span>Pedidos pendentes / em aberto</span>
+            <strong id="kpi-pending-orders">—</strong>
+            <small id="kpi-pending-sub">Aguardando aprovação ou entrega</small>
+          </article>
+          <article class="metric">
+            <span>Valor médio por pedido</span>
+            <strong id="kpi-avg-ticket">—</strong>
+            <small id="kpi-avg-sub">Ticket médio sobre pedidos ativos</small>
+          </article>
+          <article class="metric">
+            <span>Comparativo mensal</span>
+            <strong id="kpi-month-delta">—</strong>
+            <small id="kpi-month-sub">Mês atual vs. mês anterior</small>
+          </article>
+        </section>
+
+        <!-- Gráficos / Cards Comparativos -->
+        <section class="orders-charts" aria-label="Análise financeira e distribuição de status">
+          <article class="orders-card" aria-labelledby="chart-monthly-title">
+            <header class="orders-card__header">
+              <div>
+                <span class="section__eyebrow">FINANCEIRO</span>
+                <h2 id="chart-monthly-title">Comparação financeira mensal</h2>
+              </div>
+              <span class="orders-card__badge" id="chart-monthly-badge">Trimestre</span>
+            </header>
+            <div class="monthly-highlight" id="monthly-highlight"></div>
+            <div class="monthly-bars" id="monthly-chart" aria-label="Evolução mensal de compras"></div>
+          </article>
+
+          <article class="orders-card" aria-labelledby="chart-status-title">
+            <header class="orders-card__header">
+              <div>
+                <span class="section__eyebrow">ENTREGAS &amp; SITUAÇÃO</span>
+                <h2 id="chart-status-title">Atendimento e distribuição (SITUAC)</h2>
+              </div>
+              <span class="orders-card__badge" id="chart-fulfillment-badge">—</span>
+            </header>
+            <div class="fulfillment-box" id="fulfillment-box"></div>
+            <div class="status-bars" id="status-chart" aria-label="Distribuição por situação do item"></div>
+          </article>
+        </section>
+
+        <!-- Filtros e Tabela Prioritária -->
+        <section class="section orders-grid-section" id="grade-pedidos" aria-labelledby="grid-heading" aria-busy="true">
+          <div class="section__header">
+            <div>
+              <div class="section__eyebrow">01 / ITENS DE PEDIDO (ESTIPE · ESTPED)</div>
+              <h2 id="grid-heading">Relação de pedidos por requisição</h2>
+              <p>Colunas prioritárias na abertura e ordenação cronológica real pela data de inclusão (DATINC).</p>
+            </div>
+          </div>
+
+          <div class="toolbar orders-toolbar" role="search" aria-label="Filtros de pedidos">
+            <label class="field field--search">
+              <span>Busca rápida (Pedido, Req., Item, Produto ou Fornecedor)</span>
+              <input id="orders-search" type="search" placeholder="Ex.: 33534, 20029, 678 ou fornecedor…" autocomplete="off">
+            </label>
+            <label class="field">
+              <span>Filial</span>
+              <select id="orders-branch">
+                <option value="">Todas as filiais</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Situação (SITUAC)</span>
+              <select id="orders-status">
+                <option value="">Todas as situações</option>
+                <option value="pending">Pendente (P)</option>
+                <option value="approved">Aprovado (A)</option>
+                <option value="partial">Parcial (L/X)</option>
+                <option value="closed">Baixado (B)</option>
+                <option value="registered">Cadastrado (D)</option>
+                <option value="rejected">Reprovado (R)</option>
+                <option value="canceled">Cancelado (C)</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Data inicial</span>
+              <input id="orders-date-start" type="date" aria-label="Data inicial de inclusão">
+            </label>
+            <label class="field">
+              <span>Data final</span>
+              <input id="orders-date-end" type="date" aria-label="Data final de inclusão">
+            </label>
+            <label class="field">
+              <span>Ordenação</span>
+              <select id="orders-sort">
+                <option value="datinc_desc">Inclusão (DATINC) recente</option>
+                <option value="datinc_asc">Inclusão (DATINC) antiga</option>
+                <option value="valor_desc">Maior valor total (PRETOT)</option>
+                <option value="valor_asc">Menor valor total (PRETOT)</option>
+                <option value="numped_desc">Nº Pedido (NUMPED)</option>
+              </select>
+            </label>
+            <button class="clear-button" id="orders-clear" type="button">
+              <i data-lucide="filter-x" aria-hidden="true"></i> Limpar
+            </button>
+          </div>
+
+          <div class="orders-results-bar">
+            <p id="orders-results-count" role="status" aria-live="polite">Carregando registros…</p>
+            <div class="orders-pagination-size">
+              <label for="orders-per-page">Exibir</label>
+              <select id="orders-per-page">
+                <option value="25">25 linhas</option>
+                <option value="50" selected>50 linhas</option>
+                <option value="100">100 linhas</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="orders-table-wrap" role="region" aria-label="Tabela de itens de pedidos" tabindex="0">
+            <table class="orders-table" id="orders-table">
+              <thead>
+                <tr>
+                  <th scope="col">ID_IPE</th>
+                  <th scope="col">CODREQ</th>
+                  <th scope="col">NUMPED</th>
+                  <th scope="col">CODPROD / Produto</th>
+                  <th scope="col" class="num-col">QTDPED</th>
+                  <th scope="col" class="num-col">PREUNI</th>
+                  <th scope="col" class="num-col">PRETOT</th>
+                  <th scope="col" class="num-col">QTDENT</th>
+                  <th scope="col">SITUAC</th>
+                  <th scope="col">Fornecedor / Filial</th>
+                  <th scope="col">Inclusão (DATINC)</th>
+                  <th scope="col">Cot. / Observação</th>
+                </tr>
+              </thead>
+              <tbody id="orders-tbody"></tbody>
+            </table>
+          </div>
+
+          <div class="empty-state" id="orders-empty" hidden>
+            <span aria-hidden="true"><i data-lucide="search-x" aria-hidden="true"></i></span>
+            <h3>Nenhum item de pedido encontrado</h3>
+            <p id="orders-empty-text">Ajuste a busca ou limpe os filtros para visualizar todos os pedidos do trimestre.</p>
+            <button id="orders-empty-reset" type="button">
+              <i data-lucide="filter-x" aria-hidden="true"></i> Limpar filtros
+            </button>
+          </div>
+
+          <nav class="orders-pagination" id="orders-pagination" aria-label="Paginação de pedidos" hidden>
+            <button class="clear-button" id="orders-prev" type="button">
+              <i data-lucide="chevron-left" aria-hidden="true"></i> Anterior
+            </button>
+            <span id="orders-page-info">Página 1 de 1</span>
+            <button class="clear-button" id="orders-next" type="button">
+              Próxima <i data-lucide="chevron-right" aria-hidden="true"></i>
+            </button>
+          </nav>
+        </section>
+
+        <div data-layout="footer" data-component-url="{{ url_for('component', filename='footer.html') }}"></div>
+      </main>
+    </div>
+  </div>
+  <noscript>Ative o JavaScript para consultar indicadores, gráficos e tabela de pedidos.</noscript>
+</body>
+
+</html>

@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <meta name="description" content="Acesso corporativo ao Painel de Requisições e Painel TV Supersonic.">
+  <title>Acesso · Requisições Supersonic</title>
+  <link rel="icon" href="{{ url_for('static', filename='img/supersonic-mark.svg') }}" type="image/svg+xml">
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/global.css', v='6') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/login.css', v='9') }}">
+  <script src="{{ url_for('static', filename='js/vendor/lucide-1.49.0.min.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/layout.js', v='10') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/login.js', v='7') }}" defer></script>
+</head>
+
+<body class="access-page">
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <div class="access-shell">
+    <main class="access-main" id="conteudo">
+      <section class="access-intro" aria-labelledby="access-intro-title">
+        <p class="eyebrow">COMPRAS &amp; MANUTENÇÃO</p>
+        <h2 id="access-intro-title">Requisições<br> em um só lugar<span>.</span></h2>
+        <p class="access-lead">Uma visão organizada das requisições, dos pedidos, dos setores e das situações.</p>
+      </section>
+
+      <div class="access-form-area">
+        <section class="access-card" aria-labelledby="login-title">
+          <header class="access-header">
+            <a class="brand" href="{{ url_for('login') }}" aria-label="Supersonic — página de acesso">
+              <img class="brand__logo brand__logo--light"
+                src="{{ url_for('static', filename='img/supersonic-horizontal-light.png') }}" alt="Supersonic"
+                width="3136" height="893">
+              <img class="brand__logo brand__logo--dark"
+                src="{{ url_for('static', filename='img/supersonic-horizontal-dark.png') }}" alt="Supersonic"
+                width="3136" height="889">
+            </a>
+            <h1 id="login-title">Acesse o painel</h1>
+            <p class="access-description" id="login-description">Entre com seu e-mail corporativo (@ssonic.com.br) e senha.</p>
+          </header>
+
+          <ul class="access-highlights">
+            <li><span aria-hidden="true"><i data-lucide="boxes" aria-hidden="true"></i></span>
+              <div><strong>Painel administrativo e pedidos</strong>
+                <p>Consulte etapas, setores, rankings e itens de pedido.</p>
+              </div>
+            </li>
+            <li><span aria-hidden="true"><i data-lucide="monitor" aria-hidden="true"></i></span>
+              <div><strong>Acesso dedicado ao Painel TV</strong>
+                <p>A conta da televisão direciona automaticamente para a exibição em tela cheia.</p>
+              </div>
+            </li>
+          </ul>
+
+          <p class="form-alert" id="login-alert" role="alert" {% if not error_message %}hidden{% endif %}>{{ error_message or '' }}</p>
+          <p class="form-info" id="login-info" role="status" {% if not info_message %}hidden{% endif %}>{{ info_message or '' }}</p>
+
+          <form id="login-form" action="{{ url_for('login_submit') }}" method="post" novalidate>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <input type="hidden" name="next" value="{{ next_url or '' }}">
+
+            <label class="field" for="login-user"><span>E-mail corporativo</span></label>
+            <div class="access-input field">
+              <i data-lucide="mail" aria-hidden="true"></i>
+              <input id="login-user" name="email" type="text" value="{{ prefill_email or '' }}"
+                placeholder="nome@ssonic.com.br" autocomplete="username" spellcheck="false" required>
+            </div>
+
+            <label class="field" for="login-password"><span>Senha</span></label>
+            <div class="access-input access-password field">
+              <i data-lucide="lock-keyhole" aria-hidden="true"></i>
+              <input id="login-password" name="password" type="password" placeholder="Sua senha"
+                autocomplete="current-password" required>
+              <button class="clear-button" id="password-toggle" type="button" aria-controls="login-password"
+                aria-pressed="false" hidden><i data-lucide="eye" aria-hidden="true"></i><span>Mostrar</span></button>
+            </div>
+
+            <button class="clear-button access-recovery" id="recovery-toggle" type="button" aria-haspopup="dialog"
+              aria-controls="recovery-dialog">Esqueceu a senha?</button>
+
+            <button class="primary-link access-submit" id="login-submit" type="submit"><i data-lucide="log-in"
+                aria-hidden="true"></i><span>Entrar</span></button>
+          </form>
+
+          <button class="clear-button access-register" id="register-toggle" type="button" aria-haspopup="dialog"
+            aria-controls="register-dialog"><i data-lucide="user-plus" aria-hidden="true"></i> Solicitar cadastro corporativo</button>
+
+          <div data-layout="footer" data-component-url="{{ url_for('component', filename='footer.html') }}"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <dialog class="profile-dialog access-dialog" id="register-dialog" aria-labelledby="register-title">
+    <form class="profile-form" id="register-form" method="dialog" autocomplete="off" novalidate>
+      <header class="access-dialog-header">
+        <h2 id="register-title">Cadastro corporativo</h2>
+        <button class="icon-button access-dialog-close" id="register-close" type="button"
+          aria-label="Fechar cadastro"><i data-lucide="x" aria-hidden="true"></i></button>
+      </header>
+      <p id="register-description">Exclusivo para contas @ssonic.com.br. Você receberá um link de ativação válido por 24 horas.</p>
+      <p class="form-alert" id="register-alert" role="alert" hidden></p>
+      <label class="field"><span>Nome</span><span class="access-input">
+          <i data-lucide="user" aria-hidden="true"></i><input id="register-name" type="text" placeholder="Seu nome"
+            autocomplete="off" required></span></label>
+      <label class="field"><span>E-mail corporativo</span><span class="access-input">
+          <i data-lucide="mail" aria-hidden="true"></i><input id="register-email" type="email" placeholder="nome@ssonic.com.br"
+            autocomplete="off" spellcheck="false" required></span></label>
+      <label class="field"><span>Telefone (opcional)</span><span class="access-input">
+          <i data-lucide="phone" aria-hidden="true"></i><input id="register-tel" type="tel"
+            placeholder="(11) 99999-9999" autocomplete="off"></span></label>
+      <label class="field"><span>Senha (mínimo 8 caracteres)</span><span class="access-input">
+          <i data-lucide="lock-keyhole" aria-hidden="true"></i><input id="register-password" type="password"
+            placeholder="Sua senha" autocomplete="off" required></span></label>
+      <label class="field"><span>Confirme sua senha</span><span class="access-input">
+          <i data-lucide="lock-keyhole" aria-hidden="true"></i><input id="register-password-confirm" type="password"
+            placeholder="Repita sua senha" autocomplete="off" required></span></label>
+      <div class="access-dialog-actions">
+        <button class="primary-link access-submit" id="register-submit" type="submit"><i data-lucide="user-plus" aria-hidden="true"></i>
+          Cadastrar</button>
+        <button class="clear-button access-dialog-back" id="register-cancel" type="button"><i data-lucide="arrow-left"
+            aria-hidden="true"></i> Cancelar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="profile-dialog access-dialog" id="recovery-dialog" aria-labelledby="recovery-title">
+    <form class="profile-form" id="recovery-form" method="dialog" autocomplete="off" novalidate>
+      <header class="access-dialog-header">
+        <h2 id="recovery-title">Recuperar senha</h2>
+        <button class="icon-button access-dialog-close" id="recovery-close" type="button"
+          aria-label="Fechar recuperação de senha"><i data-lucide="x" aria-hidden="true"></i></button>
+      </header>
+      <p id="recovery-description">Informe seu e-mail @ssonic.com.br para receber um token temporário válido por 20 minutos.</p>
+      <p class="form-alert" id="recovery-alert" role="alert" hidden></p>
+      <label class="field"><span>E-mail corporativo</span><span class="access-input">
+          <i data-lucide="mail" aria-hidden="true"></i><input id="recovery-email" type="email" placeholder="nome@ssonic.com.br"
+            autocomplete="off" spellcheck="false" required></span></label>
+      <div class="access-dialog-actions">
+        <button class="primary-link access-submit" id="recovery-submit" type="submit"><i data-lucide="send" aria-hidden="true"></i>
+          Enviar instruções</button>
+        <button class="clear-button access-dialog-back" id="recovery-cancel" type="button"><i data-lucide="arrow-left"
+            aria-hidden="true"></i> Voltar para o login</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="profile-dialog access-dialog" id="reset-dialog" aria-labelledby="reset-title">
+    <form class="profile-form" id="reset-form" method="dialog" autocomplete="off" novalidate>
+      <header class="access-dialog-header">
+        <h2 id="reset-title">Redefinir senha</h2>
+        <button class="icon-button access-dialog-close" id="reset-close" type="button"
+          aria-label="Fechar redefinição de senha"><i data-lucide="x" aria-hidden="true"></i></button>
+      </header>
+      <p id="reset-description">Defina sua nova senha corporativa (o token de recuperação é de uso único e válido por 20 minutos).</p>
+      <p class="form-alert" id="reset-alert" role="alert" hidden></p>
+      <input id="reset-token" type="hidden">
+      <label class="field"><span>Nova senha (mínimo 8 caracteres)</span><span class="access-input">
+          <i data-lucide="lock-keyhole" aria-hidden="true"></i><input id="reset-password" type="password"
+            placeholder="Nova senha" autocomplete="new-password" required></span></label>
+      <label class="field"><span>Confirme a nova senha</span><span class="access-input">
+          <i data-lucide="lock-keyhole" aria-hidden="true"></i><input id="reset-password-confirm" type="password"
+            placeholder="Repita a nova senha" autocomplete="new-password" required></span></label>
+      <div class="access-dialog-actions">
+        <button class="primary-link access-submit" id="reset-submit" type="submit"><i data-lucide="check" aria-hidden="true"></i>
+          Salvar nova senha</button>
+      </div>
+    </form>
+  </dialog>
+
+  <noscript>O formulário de login funciona sem JavaScript. Ative-o para utilizar o painel após entrar.</noscript>
+</body>
+
+</html>

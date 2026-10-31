@@ -1,0 +1,41 @@
+{# Macros compartilhadas #}
+{% macro badge_status(s) -%}
+<span class="badge badge--{{ s }}">{{ STATUS[s] }}</span>
+{%- endmacro %}
+
+{% macro badge_prio(p) -%}
+<span class="prio prio--{{ p }}">{{ PRIORIDADES[p] }}</span>
+{%- endmacro %}
+
+{% macro campo(nome, rotulo, valores, erros, tipo='text', obrigatorio=True, extra='') -%}
+<label class="field {{ 'field--erro' if erros.get(nome) }}">
+  <span>{{ rotulo }}{% if obrigatorio %} <b aria-hidden="true">*</b>{% endif %}</span>
+  <input type="{{ tipo }}" name="{{ nome }}" value="{{ valores.get(nome, '') if valores.get(nome) is not none else '' }}"
+         {% if obrigatorio %}required{% endif %} {{ extra|safe }}>
+  {% if erros.get(nome) %}<small class="field__erro" role="alert">{{ erros[nome] }}</small>{% endif %}
+</label>
+{%- endmacro %}
+
+{% macro selecao(nome, rotulo, opcoes, valores, erros, vazio=None) -%}
+<label class="field {{ 'field--erro' if erros.get(nome) }}">
+  <span>{{ rotulo }}</span>
+  <select name="{{ nome }}" {% if not vazio %}required{% endif %}>
+    {% if vazio %}<option value="">{{ vazio }}</option>{% else %}<option value="" disabled {{ 'selected' if not valores.get(nome) }}>Selecione…</option>{% endif %}
+    {% for chave, texto in opcoes.items() %}
+    <option value="{{ chave }}" {{ 'selected' if valores.get(nome) == chave }}>{{ texto }}</option>
+    {% endfor %}
+  </select>
+  {% if erros.get(nome) %}<small class="field__erro" role="alert">{{ erros[nome] }}</small>{% endif %}
+</label>
+{%- endmacro %}
+
+{% macro paginacao(pagina, paginas, endpoint, filtros) -%}
+{% if paginas > 1 %}
+<nav class="pager" aria-label="Paginação">
+  {% if pagina > 1 %}<a class="btn btn--ghost" href="{{ url_for(endpoint, pagina=pagina-1, **filtros) }}">← Anterior</a>{% endif %}
+  <span>Página {{ pagina }} de {{ paginas }}</span>
+  {% if pagina < paginas %}<a class="btn btn--ghost" href="{{ url_for(endpoint, pagina=pagina+1, **filtros) }}">Próxima →</a>{% endif %}
+</nav>
+{% endif %}
+{%- endmacro %}
+

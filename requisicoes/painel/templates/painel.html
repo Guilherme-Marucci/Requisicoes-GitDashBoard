@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% from "_macros.html" import badge_status, badge_prio, paginacao with context %}
+{% block title %}Requisições{% endblock %}
+{% block crumb %}Requisições{% endblock %}
+{% block content %}
+<section class="hero">
+  <div>
+    <div class="eyebrow">{{ 'MINHAS REQUISIÇÕES' if escopo_proprio else 'VISÃO GERAL' }}</div>
+    <h1>Painel de requisições<span class="dot">.</span></h1>
+  </div>
+  {% if pode('requisicoes.criar') %}<a class="btn btn--primary" href="{{ url_for('requisicoes.nova') }}">＋ Cadastrar nova requisição</a>{% endif %}
+</section>
+
+<section class="metrics" aria-label="Resumo">
+  <div class="metric"><span>Total (filtro atual)</span><strong>{{ metricas.total }}</strong></div>
+  <div class="metric"><span>Pendentes</span><strong>{{ metricas.por_status.get('pending', 0) + metricas.por_status.get('registered', 0) }}</strong></div>
+  <div class="metric metric--warn"><span>Com prazo vencido</span><strong>{{ metricas.atrasadas }}</strong></div>
+  <div class="metric"><span>Valor estimado</span><strong class="metric__money">{{ metricas.valor_estimado|moeda }}</strong></div>
+</section>
+
+<section class="grid-2">
+  <div class="panel">
+    <h2 class="panel__title">Por situação</h2>
+    {% for chave, rotulo in STATUS.items() if metricas.por_status.get(chave) %}
+    <div class="bar-row"><span>{{ rotulo }}</span>
+      <div class="bar"><i class="bar__fill bar__fill--{{ chave }}" data-pct="{{ (metricas.por_status[chave] * 100 / metricas.total)|round(1) }}"></i></div>
+      <b>{{ metricas.por_status[chave] }}</b></div>
+    {% else %}<p class="muted">Sem dados para o filtro atual.</p>{% endfor %}
+  </div>
+  <div class="panel">
+    <h2 class="panel__title">Por setor</h2>
+    {% for s in metricas.por_setor %}
+    <div class="bar-row"><span>{{ SETORES.get(s.setor, s.setor) }}</span>
+      <div class="bar"><i class="bar__fill" data-pct="{{ (s.total * 100 / metricas.total)|round(1) }}"></i></div><b>{{ s.total }}</b></div>
+    {% else %}<p class="muted">Sem dados para o filtro atual.</p>{% endfor %}
+  </div>
+</section>
+
+<section class="panel">
+  <form class="filters" method="get" action="{{ url_for('main.painel') }}" role="search">
+    <label class="field field--wide"><span>Busca</span><input type="search" name="q" value="{{ filtros.q }}" placeholder="Código, título, item ou referência"></label>
+    <label class="field"><span>Situação</span><select name="status"><option value="">Todas</option>
+      {% for k, v in STATUS.items() %}<option value="{{ k }}" {{ 'selected' if filtros.status == k }}>{{ v }}</option>{% endfor %}</select></label>
+    <label class="field"><span>Setor</span><select name="setor"><option value="">Todos</option>
+      {% for k, v in SETORES.items() %}<option value="{{ k }}" {{ 'selected' if filtros.setor == k }}>{{ v }}</option>{% endfor %}</select></label>
+    <label class="field"><span>Prioridade</span><select name="prioridade"><option value="">Todas</option>
+      {% for k, v in PRIORIDADES.items() %}<option value="{{ k }}" {{ 'selected' if filtros.prioridade == k }}>{{ v }}</option>{% endfor %}</select></label>
+    <label class="field"><span>Filial</span><select name="filial"><option value="">Todas</option>
+      {% for f in opcoes.filiais %}<option value="{{ f }}" {{ 'selected' if filtros.filial == f }}>{{ f }}</option>{% endfor %}</select></label>
+    <label class="field"><span>De</span><input type="date" name="data_inicio" value="{{ filtros.data_inicio }}"></label>
+    <label class="field"><span>Até</span><input type="date" name="data_fim" value="{{ filtros.data_fim }}"></label>
+    <label class="field"><span>Ordenar</span><select name="ordenar">
+      {% for k, v in {'recentes': 'Mais recentes', 'antigas': 'Mais antigas', 'prazo': 'Prazo', 'prioridade': 'Prioridade'}.items() %}
+      <option value="{{ k }}" {{ 'selected' if filtros.ordenar == k }}>{{ v }}</option>{% endfor %}</select></label>
+    <div class="filters__actions">
+      <button class="btn btn--primary" type="submit">Filtrar</button>
+      <a class="btn btn--ghost" href="{{ url_for('main.painel') }}">Limpar</a>
+    </div>
+  </form>
+
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>Código</th><th>Título</th><th>Setor</th><th>Filial</th><th>Prioridade</th><th>Situação</th><th>Prazo</th><th>Criada</th></tr></thead>
+      <tbody>
+      {% for r in itens %}
+        <tr>
+          <td><a class="code" href="{{ url_for('requisicoes.detalhe', req_id=r.id) }}">{{ r.codigo }}</a></td>
+          <td>{{ r.titulo }}<small class="muted block">{{ r.requerente_nome }}</small></td>
+          <td>{{ SETORES.get(r.setor, r.setor) }}</td><td>{{ r.filial }}</td>
+          <td>{{ badge_prio(r.prioridade) }}</td><td>{{ badge_status(r.status) }}</td>
+          <td>{{ r.prazo|dt('%d/%m/%Y') }}</td><td>{{ r.criado_em|dt }}</td>
+        </tr>
+      {% else %}
+        <tr><td colspan="8" class="empty">Nenhuma requisição encontrada. Ajuste os filtros ou cadastre uma nova.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {{ paginacao(pagina, paginas, 'main.painel', filtros) }}
+</section>
+{% endblock %}

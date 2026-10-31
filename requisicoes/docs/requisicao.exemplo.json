@@ -1,0 +1,100 @@
+{
+  "versaoModelo": 1,
+  "demonstrativo": true,
+  "idLocal": "080a80cd-1d53-41d9-8448-6cee1bf08e62",
+  "estadoPortal": "rascunho",
+  "codigoERP": null,
+  "situacaoERP": null,
+  "geral": {
+    "filial": {
+      "codigo": "5",
+      "descricao": "Filial demonstrativa"
+    },
+    "funcionario": {
+      "codigo": "FUNC-DEMO",
+      "descricao": "Funcionário demonstrativo"
+    },
+    "fornecedor": null,
+    "setor": {
+      "codigo": "5",
+      "descricao": "Transporte"
+    },
+    "aprovador": null,
+    "liberador": null,
+    "filialOS": null,
+    "dataReferencia": "2026-10-01",
+    "dataLimiteEntrega": null,
+    "ordemServico": null,
+    "observacao": "Aquisição de filme stretch para uso operacional.",
+    "tipo": "produto",
+    "tipoRequisicao": null
+  },
+  "classificacao": {
+    "unidadeNegocio": {
+      "codigo": "3",
+      "descricao": "Manaus (AM)"
+    },
+    "centroGasto": {
+      "codigo": "2",
+      "descricao": "Armazenagem"
+    },
+    "centroCusto": {
+      "codigo": "2",
+      "descricao": "Operacionais"
+    },
+    "classeSintetica": {
+      "codigo": "226",
+      "descricao": "Custo operacional do armazém"
+    },
+    "classeAnalitica": {
+      "codigo": "228",
+      "descricao": "Materiais auxiliares na operação"
+    }
+  },
+  "itens": [
+    {
+      "idLocal": "a0ee90aa-0483-4bd4-afc7-4d50379053f6",
+      "sequencia": 1,
+      "produto": {
+        "codigo": "19597",
+        "descricao": "Filme stretch 25 micra 500mm bobina de 4kg",
+        "unidade": "UN"
+      },
+      "quantidade": "180",
+      "unidade": "UN",
+      "veiculo": null,
+      "critico": false,
+      "valorInformado": "17064",
+      "mediaConsumo": "0",
+      "aplicacao": "Uso operacional",
+      "observacao": "Exemplo estrutural, sem envio ao ERP.",
+      "situacaoERP": null,
+      "cotado": null,
+      "pedido": null
+    }
+  ],
+  "localizacoes": [
+    {
+      "idLocal": "4d726744-0491-4d51-8df7-f29996947b41",
+      "itemIdLocal": "a0ee90aa-0483-4bd4-afc7-4d50379053f6",
+      "localizacao": {
+        "codigo": "LOC-DEMO",
+        "descricao": "Localização demonstrativa"
+      },
+      "quantidade": "180"
+    }
+  ],
+  "anexos": [],
+  "baixas": null,
+  "cotacoes": null,
+  "auditoriaERP": {
+    "incluidoEm": null,
+    "incluidoPor": null,
+    "atualizadoEm": null,
+    "atualizadoPor": null,
+    "aprovadoEm": null,
+    "aprovadoPor": null,
+    "liberadoEm": null,
+    "liberadoPor": null
+  }
+}

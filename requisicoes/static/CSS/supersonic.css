@@ -1,0 +1,108 @@
+/* Cores originais de Logo-01.svg; os tons de interface preservam contraste e hierarquia. */
+:root {
+  --ss-brand-day: #14b1e7;
+  --ss-brand-night: #394f5a;
+  --ss-brand-gray: #4d4d4f;
+  --ss-page: #f4f7f8;
+  --ss-page-soft: #edf2f4;
+  --ss-surface: #ffffff;
+  --ss-raised: #f8fafb;
+  --ss-hover: #e5f3f8;
+  --ss-text: var(--ss-brand-night);
+  --ss-muted: #536773;
+  --ss-border: #cedce2;
+  --ss-border-soft: #e0e9ed;
+  /* O ciano original fica nos destaques; texto pequeno exige um tom mais escuro no claro. */
+  --ss-link: #08799f;
+  --ss-accent-soft: #e3f5fc;
+  --ss-button: #08799f;
+  --ss-button-hover: #066383;
+  --ss-on-button: #ffffff;
+  --ss-white: #ffffff;
+  --ss-on-night-muted: #d6e2e9;
+  --ss-on-night-subtle: #c6d6df;
+  --ss-on-night-text: #e0e8ed;
+  --ss-on-night-lead: #cbd5e1;
+  --ss-on-night-border: #bacdd7;
+  --ss-on-night-hover: rgb(255 255 255 / 12%);
+  --ss-success: #176534;
+  --ss-danger: #b42318;
+  --ss-exit: #e6384c;
+  --ss-success-surface: #e6f6ef;
+  --ss-success-label: #176344;
+  --ss-pending-surface: #fff3d8;
+  --ss-pending-label: #825d0c;
+  --ss-warning-surface: #fff5d9;
+  --ss-warning-label: #654d08;
+  --ss-warning-border: #ead493;
+  --ss-error-surface: #fff0ee;
+  --ss-error-border: #e6b1aa;
+  --ss-no-js-surface: #fff1cc;
+  --ss-live: #5bd4b8;
+  --ss-live-halo: rgba(91, 212, 184, .12);
+  --ss-email-surface: rgba(255, 192, 133, .13);
+  --ss-email-label: #8b4a14;
+  --ss-hero-glow: rgb(20 177 231 / 12%);
+  --ss-shadow-color: rgb(57 79 90 / 12%);
+  --ss-shadow-panel: rgb(57 79 90 / 8%);
+  --ss-shadow-visual: rgba(0, 0, 0, .16);
+  --ss-shadow-menu: rgb(31 54 73 / 17%);
+  --ss-shadow-dialog: rgb(20 41 54 / 24%);
+  --ss-overlay-dialog: rgb(39 55 65 / 60%);
+  --ss-overlay-sidebar: rgb(0 0 0 / 40%);
+  --ss-overlay-mobile: rgba(1, 8, 12, .65);
+  /* Catálogo demonstrativo: estas cores não definem códigos ou transições do ERP. */
+  --ss-status-registered: #e1e5ea;
+  --ss-status-pending: #a9cfff;
+  --ss-status-approved: #9ee8e8;
+  --ss-status-partial: #f8f19c;
+  --ss-status-rejected: #f6b2bd;
+  --ss-status-canceled: #afb8c1;
+  --ss-status-released: #9be5a4;
+  --ss-status-quotation: #f8b884;
+  --ss-status-closed: #f48e20;
+  /* Variações intensas para leitura à distância, preservando as famílias das situações. */
+  --ss-tv-registered: #dbe4ef;
+  --ss-tv-pending: #438fff;
+  --ss-tv-approved: #16d6d2;
+  --ss-tv-partial: #f4dc35;
+  --ss-tv-rejected: #f66a8c;
+  --ss-tv-canceled: #8898ab;
+  --ss-tv-released: #42d76b;
+  --ss-tv-quotation: #ffab54;
+  --ss-tv-closed: #f8850b;
+  --ss-tv-alert: #d51f35;
+  --ss-tv-on-color: #142128;
+}
+
+:root[data-theme="dark"], body.dark-theme {
+  --ss-page: #142128;
+  --ss-page-soft: #1b2c35;
+  --ss-surface: #233640;
+  --ss-raised: #2a3f4a;
+  --ss-hover: #324b58;
+  --ss-text: #f4f7f8;
+  --ss-muted: #bacbd3;
+  --ss-border: #49616e;
+  --ss-border-soft: #394f5a;
+  --ss-link: var(--ss-brand-day);
+  --ss-accent-soft: rgb(20 177 231 / 12%);
+  --ss-button: var(--ss-brand-day);
+  --ss-button-hover: #5ac9ed;
+  --ss-on-button: #142128;
+  --ss-success: #6ee7b7;
+  --ss-danger: #fda4af;
+  --ss-exit: var(--ss-danger);
+  --ss-success-surface: #163c3e;
+  --ss-success-label: var(--ss-success);
+  --ss-pending-surface: #453b24;
+  --ss-pending-label: #fcd78a;
+  --ss-warning-surface: #302b20;
+  --ss-warning-label: #fcd78a;
+  --ss-warning-border: #76603a;
+  --ss-error-surface: #3b2430;
+  --ss-error-border: #874253;
+  --ss-email-label: #f2ae71;
+  --ss-shadow-color: rgb(0 0 0 / 16%);
+  --ss-shadow-panel: rgb(0 0 0 / 18%);
+}

@@ -1,0 +1,528 @@
+/* Dimensionamento exclusivo para televisores widescreen 16:9 de 40" a 70" (Full HD 1080p a 4K UHD).
+   Trava o viewport integralmente em 100vw × 100vh sem barras de rolagem e sem quebras para telas móveis. */
+html:has(> body.tv) {
+  overflow: hidden;
+}
+
+.tv {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  padding: 2.3vh 2.8vw 2.1vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1.8vh;
+  /* Escala acoplada simultaneamente à largura e à altura útil das TVs de 40" a 70". */
+  font-size: clamp(16px, min(1.25vw, 2.15vh), 50px);
+  user-select: none;
+}
+
+.tv [hidden] {
+  display: none !important;
+}
+
+.tv-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 2vw;
+  padding-bottom: 1.6vh;
+  border-bottom: 1px solid var(--ss-border);
+}
+
+.tv-brand {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.tv-header .brand__logo {
+  width: 11.5vw;
+  min-width: 150px;
+  max-width: 460px;
+  height: auto;
+}
+
+.tv-heading {
+  border-left: 1px solid var(--ss-border);
+  padding-left: 2vw;
+}
+
+.tv-heading span,
+.tv-clock span,
+.tv-section-heading > div > span {
+  color: var(--ss-link);
+  font-size: 0.6em;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+}
+
+.tv-heading h1 {
+  margin: 0.08em 0 0;
+  font-size: 1.5em;
+  line-height: 1.1;
+}
+
+.tv-clock {
+  margin-left: auto;
+  display: grid;
+  text-align: right;
+  gap: 0.3em;
+}
+
+.tv-clock time {
+  font-size: 1.15em;
+  font-variant-numeric: tabular-nums;
+}
+
+.tv-clock span {
+  color: var(--ss-muted);
+  letter-spacing: 0.06em;
+}
+
+.tv-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.32em;
+}
+
+.tv-controls button,
+.tv-controls a {
+  padding: 0.38em;
+  min-width: 1.85em;
+  min-height: 1.85em;
+  font-size: inherit;
+  text-decoration: none;
+}
+
+.tv-controls .lucide {
+  width: 0.98em;
+  height: 0.98em;
+}
+
+.tv-controls .theme-button span {
+  display: none;
+}
+
+.tv-main {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.tv-section-heading {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 1em;
+  margin-bottom: 1.8vh;
+}
+
+.tv-section-heading h2 {
+  font-size: 1.6em;
+  line-height: 1.12;
+  margin: 0.18em 0 0;
+}
+
+.tv-section-heading p {
+  color: var(--ss-muted);
+  margin: 0;
+  font-size: 0.85em;
+  font-variant-numeric: tabular-nums;
+}
+
+.tv-chart-screen {
+  display: grid;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Três faixas widescreen balanceadas para leitura à distância em TVs de 40" a 70". */
+.tv-summary-screen {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1.15fr) minmax(0, 1.15fr) minmax(0, 0.7fr);
+  gap: 1.8vh;
+  flex: 1;
+  min-height: 0;
+}
+
+.tv-summary,
+.tv-placeholder,
+.tv-chart,
+.tv-table-wrap {
+  background: var(--ss-surface);
+  border: 1px solid var(--ss-border);
+  border-radius: 0.95em;
+}
+
+.tv-summary {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(11em, 28%);
+  align-content: center;
+  align-items: center;
+  gap: 0.5em 2.2vw;
+  padding: 1.8vh 2.2vw;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.tv-placeholder--wide {
+  grid-column: 1 / -1;
+}
+
+.tv-latest-info {
+  grid-column: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.35em;
+  min-width: 0;
+}
+
+.tv-latest-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1em;
+  color: var(--ss-muted);
+  font-size: 0.92em;
+}
+
+.tv-latest-header span {
+  color: var(--ss-muted);
+}
+
+.tv-latest-date {
+  font-size: 0.9em;
+  color: var(--ss-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.tv-latest-info > strong,
+.tv-summary > strong {
+  grid-column: 1;
+  font-size: clamp(1.2em, min(2.3vw, 4vh), 2.75em);
+  line-height: 1.14;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  color: var(--ss-text);
+}
+
+.tv-summary.is-clear .tv-latest-info > strong,
+.tv-summary.is-clear > strong {
+  font-size: clamp(1.2em, min(2.3vw, 4vh), 2.75em);
+  letter-spacing: -0.02em;
+  color: var(--ss-text);
+}
+
+.tv-pending-summary {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1em;
+  padding: 1.15em 1.3em;
+  border-left: 0.22em solid var(--ss-tv-alert);
+  border-radius: 0.35em;
+  background: var(--ss-error-surface);
+}
+
+.tv-pending-summary strong {
+  font-size: 1.9em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--ss-danger);
+}
+
+.tv-summary.is-clear .tv-pending-summary {
+  border-color: var(--ss-success);
+  background: var(--ss-success-surface);
+}
+
+.tv-summary.is-clear .tv-pending-summary strong {
+  color: var(--ss-success);
+}
+
+.tv-placeholder {
+  display: grid;
+  place-items: center;
+  padding: 0.8em 1.4em;
+  min-height: 0;
+}
+
+.tv-placeholder h3 {
+  margin: 0;
+  font-size: 1.45em;
+}
+
+.tv-chart {
+  padding: 1.8vh 2.4vw;
+  display: grid;
+  align-content: space-evenly;
+  gap: 0.9vh;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.tv-bar {
+  display: grid;
+  grid-template-columns: 7.4em minmax(0, 1fr) 2.4em 3.2em;
+  align-items: center;
+  gap: 0.85em;
+}
+
+.tv-bar-label {
+  font-weight: 600;
+  font-size: 0.92em;
+}
+
+.tv-bar-track {
+  height: 1.15em;
+  background: var(--ss-page-soft);
+  border-radius: 0.28em;
+  overflow: hidden;
+}
+
+.tv-bar-fill {
+  display: block;
+  height: 100%;
+  background: var(--status-color);
+  border-radius: inherit;
+}
+
+.tv-bar strong {
+  text-align: right;
+  font-size: 1.2em;
+  font-variant-numeric: tabular-nums;
+}
+
+.tv-bar small {
+  color: var(--ss-muted);
+  font-size: 0.82em;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.tv [data-status="unmapped"] {
+  --status-color: var(--ss-muted);
+}
+.tv [data-status="registered"] {
+  --status-color: var(--ss-tv-registered);
+}
+.tv [data-status="pending"] {
+  --status-color: var(--ss-tv-pending);
+}
+.tv [data-status="approved"] {
+  --status-color: var(--ss-tv-approved);
+}
+.tv [data-status="partial"] {
+  --status-color: var(--ss-tv-partial);
+}
+.tv [data-status="rejected"] {
+  --status-color: var(--ss-tv-rejected);
+}
+.tv [data-status="canceled"] {
+  --status-color: var(--ss-tv-canceled);
+}
+.tv [data-status="released"] {
+  --status-color: var(--ss-tv-released);
+}
+.tv [data-status="quotation"] {
+  --status-color: var(--ss-tv-quotation);
+}
+.tv [data-status="closed"] {
+  --status-color: var(--ss-tv-closed);
+}
+
+.tv-table-screen {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.tv-table-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.tv-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 0.95em;
+}
+
+.tv-table th {
+  background: var(--ss-page-soft);
+  color: var(--ss-muted);
+  font-size: 0.76em;
+  text-align: left;
+  padding: 1.2vh 0.85em;
+}
+
+.tv-table td {
+  padding: 0.55vh 0.85em;
+  height: 9.6vh;
+  border-top: 1px solid var(--ss-border-soft);
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+}
+
+.tv-table tbody tr:nth-child(even) {
+  background: var(--ss-raised);
+}
+
+.tv-col-code {
+  width: 10%;
+}
+.tv-col-branch {
+  width: 7%;
+}
+.tv-col-product {
+  width: 21%;
+}
+.tv-col-name {
+  width: 13%;
+}
+.tv-col-note {
+  width: 33%;
+}
+.tv-col-status {
+  width: 16%;
+}
+
+.tv-cell-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  line-height: 1.3;
+}
+
+.tv-table td:first-child {
+  font-weight: 800;
+  color: var(--ss-link);
+  font-variant-numeric: tabular-nums;
+}
+
+.tv-table th:last-child,
+.tv-table td:last-child {
+  text-align: right;
+}
+
+.tv-badge {
+  display: inline-block;
+  padding: 0.45em 0.65em;
+  border-radius: 0.4em;
+  background: var(--status-color);
+  color: var(--ss-tv-on-color);
+  font-size: 0.85em;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.tv-badge[data-status="pending"] {
+  background: var(--ss-tv-alert);
+  color: var(--ss-white);
+  animation: tv-alert 2.4s ease-in-out infinite;
+}
+
+/* Pulso suave sem apagar o rótulo ou produzir flashes rápidos. */
+@keyframes tv-alert {
+  50% {
+    box-shadow: 0 0 0 0.25em
+      color-mix(in srgb, var(--ss-tv-alert) 24%, transparent);
+  }
+}
+
+.tv-empty {
+  margin: auto;
+  padding: 1.3em;
+  color: var(--ss-muted);
+  text-align: center;
+}
+
+.tv-footer {
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1em;
+  padding: 1.1vh 0 0.65vh;
+  font-size: 0.68em;
+  color: var(--ss-muted);
+  border-top: 1px solid var(--ss-border);
+}
+
+.tv-footer p {
+  margin: 0;
+}
+
+.tv-footer p[data-warning="true"] {
+  color: var(--ss-danger);
+  font-weight: 700;
+}
+
+#tv-screen-label {
+  white-space: nowrap;
+}
+
+.tv-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--ss-border-soft);
+  opacity: 0.5;
+}
+
+.tv-progress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--ss-brand-day);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.tv .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tv-badge[data-status="pending"] {
+    animation: none;
+  }
+  .tv-progress {
+    display: none;
+  }
+}
