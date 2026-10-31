@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> Cadastrar-se</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <!--'bootstrap.min.CSS' é um compilasdo de codigos de estilização CSS e o link acima puxa toda essa framework-->
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script>
+      function cadastro() {}
+    </script>
+  </head>
+  <body class="bg-light">
+    <div
+      class="container min-vh-100 d-flex justify-content-center align-items-center py-4"
+    >
+      <div
+        class="card shadow-sm rounded-4 p-4"
+        style="max-width: 480px; width: 100%"
+      >
+        
+          <div class="text mb-4">
+            <div class="text mb-4">
+              <h1><strong>Crie uma conta</strong></h1>
+              <p>Informe seus dados para cadastrar-se no sistema</p>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <label for="name" class="form-label">Nome completo</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  placeholder="Ex. Guilherme Alves"
+                />
+              </div>
+              <div class="col-md-12">
+                <label for="email" class="form-label">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  placeholder="guilherme.alves@email.com"
+                />
+              </div>
+              <div class="col-md-6">
+                <label for = "phone" class="form-label">Telefone</label>
+                <input
+                  type="tel"
+                  class="form-control"
+                  id="phone"
+                  placeholder="Ex. (19) 9 9119-9119"
+                />
+              </div>
+
+              <div class="col-md-6">
+                <label for="cpf" class="form-label">CPF</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="cpf"
+                    placeholder="123.123.123-12"
+                    maxlength="14"
+                    />
+              </div>
+              <div class="col-md-12">
+                <label for="password" class="form-label">Senha</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  placeholder="*********"
+                />
+              </div>
+              <div class="col-md-12 mt-3">
+                <button class="btn btn-dark btn-lg w-100" id="validadion">
+                  Entrar
+                </button>
+              </div>
+              <p class="text-muted text-center mt-3">
+                Já possui uma conta? <a href="login.html">Faça login</a>
+              </p>
+            </div>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>
