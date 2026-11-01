@@ -1,0 +1,56 @@
+
+
+# Python compilation and cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Environments
+.venv/
+env/
+venv/
+ENV/
+
+# Sensitive configuration
+.env
+.env.*
+!.env.example
+
+# Storage runtime snapshots and locks
+requisicoes/storage/*.json
+requisicoes/storage/*.lock
+requisicoes/storage/.flask_secret
+storage/*.json
+storage/*.lock
+storage/.flask_secret
+!requisicoes/storage/.gitkeep
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files and archives
+Thumbs.db
+.DS_Store
+*.zip
+*.tar.gz
+
+# Legacy redundant directory
+Painel_Requisicao-REQ_NEW/
+
+# Tests
+tests/
+requisicoes/tests/
+
+# AI context and agent instructions
+AGENTS.md
+MEMORY.md
+atualizacoes_do_projeto.md
+CLAUDE.md
+GEMINI.md
+.ai/
+**/MEMORY.md
+**/AGENTS.md

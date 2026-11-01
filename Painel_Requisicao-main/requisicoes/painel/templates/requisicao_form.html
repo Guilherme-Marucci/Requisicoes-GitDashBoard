@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% from "_macros.html" import campo, selecao %}
+{% block title %}{{ 'Editar requisição' if edicao else 'Nova requisição' }}{% endblock %}
+{% block crumb %}Requisições / {{ 'Editar' if edicao else 'Nova' }}{% endblock %}
+{% block content %}
+<section class="hero"><div><div class="eyebrow">{{ r.codigo if edicao else 'CADASTRO' }}</div>
+  <h1>{{ 'Editar requisição' if edicao else 'Cadastrar nova requisição' }}<span class="dot">.</span></h1></div></section>
+{% if erros %}<div class="flash flash--erro" role="alert">Corrija os campos destacados e envie novamente.</div>{% endif %}
+<form class="panel form-grid" method="post" novalidate
+      action="{{ url_for('requisicoes.editar', req_id=r.id) if edicao else url_for('requisicoes.nova') }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  {{ campo('titulo', 'Título', valores, erros, extra='maxlength="140"') }}
+  {{ campo('item', 'Item solicitado', valores, erros, extra='maxlength="160"') }}
+  {{ selecao('setor', 'Setor', SETORES, valores, erros) }}
+  {{ campo('filial', 'Filial', valores, erros, extra='maxlength="40"') }}
+  {{ campo('quantidade', 'Quantidade', valores, erros, 'text', True, 'inputmode="decimal"') }}
+  <label class="field {{ 'field--erro' if erros.get('unidade') }}"><span>Unidade</span>
+    <select name="unidade">{% for u in svc.UNIDADES|sort %}<option {{ 'selected' if valores.get('unidade') == u }}>{{ u }}</option>{% endfor %}</select>
+    {% if erros.get('unidade') %}<small class="field__erro">{{ erros.unidade }}</small>{% endif %}</label>
+  {{ selecao('prioridade', 'Prioridade', PRIORIDADES, valores, erros) }}
+  {{ campo('valor_estimado', 'Valor estimado (R$)', valores, erros, 'text', False, 'inputmode="decimal"') }}
+  {{ campo('prazo', 'Prazo desejado', valores, erros, 'date', False) }}
+  {{ campo('referencia', 'Referência / OS', valores, erros, 'text', False, 'maxlength="60"') }}
+  <label class="field field--full {{ 'field--erro' if erros.get('descricao') }}"><span>Descrição <b aria-hidden="true">*</b></span>
+    <textarea name="descricao" rows="5" required maxlength="2000">{{ valores.get('descricao', '') }}</textarea>
+    {% if erros.get('descricao') %}<small class="field__erro" role="alert">{{ erros.descricao }}</small>{% endif %}</label>
+  <div class="form-actions field--full">
+    <button class="btn btn--primary" type="submit">{{ 'Salvar alterações' if edicao else 'Cadastrar requisição' }}</button>
+    <a class="btn btn--ghost" href="{{ url_for('requisicoes.detalhe', req_id=r.id) if edicao else url_for('main.painel') }}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}
+

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Usuários{% endblock %}
+{% block crumb %}Administração / Usuários{% endblock %}
+{% block content %}
+<section class="hero"><div><div class="eyebrow">SUPER-ADMIN</div><h1>Gestão de usuários<span class="dot">.</span></h1></div></section>
+<section class="panel"><div class="table-wrap"><table class="table">
+  <thead><tr><th>Usuário</th><th>Nome</th><th>E-mail</th><th>Perfil</th><th>Último acesso</th><th>Situação</th></tr></thead>
+  <tbody>{% for u in lista %}
+  <tr>
+    <td><span class="code">{{ u.username }}</span></td><td>{{ u.nome }}</td><td>{{ u.email }}</td>
+    <td><form class="inline" method="post" action="{{ url_for('config.admin_role', user_id=u.id) }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <select name="role" aria-label="Perfil de {{ u.username }}">{% for r in roles %}<option {{ 'selected' if u.role == r }}>{{ r }}</option>{% endfor %}</select>
+      <button class="btn btn--ghost" type="submit">Aplicar</button></form></td>
+    <td>{{ u.ultimo_login|dt }}</td>
+    <td><form class="inline" method="post" action="{{ url_for('config.admin_ativo', user_id=u.id) }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <input type="hidden" name="ativo" value="{{ 0 if u.ativo else 1 }}">
+      <button class="btn btn--ghost" type="submit">{{ 'Ativo · desativar' if u.ativo else 'Inativo · ativar' }}</button></form></td>
+  </tr>{% endfor %}</tbody></table></div></section>
+{% endblock %}
+

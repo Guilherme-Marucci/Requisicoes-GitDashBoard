@@ -1,0 +1,30 @@
+{
+  "versao": 1,
+  "observacao": "Somente hashes. Troque as senhas temporárias após o primeiro acesso.",
+  "usuarios": [
+    {
+      "username": "superadmin",
+      "nome": "Super Admin",
+      "email": "superadmin@painel.local",
+      "role": "super-admin",
+      "tema": "dark",
+      "senha_hash": "pbkdf2:sha256:600000$WmTPXCs10EPP0DEV$5b5a8ecaafb071cef39c856cd14c3cfee7a9284b011ff218237142c056b3f329"
+    },
+    {
+      "username": "admin",
+      "nome": "Administrador",
+      "email": "admin@painel.local",
+      "role": "admin",
+      "tema": "dark-purple",
+      "senha_hash": "pbkdf2:sha256:600000$Nc8d4bBYJdnmfj36$e4a79a630e23ccd3b9cd50d76ca69daef695c8e456d6828cdf1e240d58591bcb"
+    },
+    {
+      "username": "usuario",
+      "nome": "Usuário Teste",
+      "email": "usuario@painel.local",
+      "role": "usuario",
+      "tema": "dark",
+      "senha_hash": "pbkdf2:sha256:600000$1ShyDxkq3wqmI6tR$a0f20a1a67695c53ca0e318ff8483b08939d1de02beb769e0f383288929f1a99"
+    }
+  ]
+}

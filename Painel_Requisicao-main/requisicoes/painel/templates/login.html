@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Entrar{% endblock %}
+{% block body_class %}login-page{% endblock %}
+{% block public %}
+<main class="login">
+  <form class="login__card" method="post" action="{{ url_for('auth.login') }}" novalidate>
+    <div class="brand brand--lg"><span class="brand__mark">▲</span> REQ<span class="brand__sep">//</span>PAINEL</div>
+    <p class="login__sub">Acesso restrito · autentique-se para continuar</p>
+    {% if erro %}<div class="flash flash--erro" role="alert">{{ erro }}</div>{% endif %}
+    {% for categoria, mensagem in get_flashed_messages(with_categories=true) %}
+    <div class="flash flash--{{ categoria }}" role="status">{{ mensagem }}</div>
+    {% endfor %}
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="next" value="{{ next_url }}">
+    <label class="field"><span>Usuário ou e-mail</span>
+      <input name="identificador" value="{{ identificador }}" autocomplete="username" autofocus required maxlength="150"></label>
+    <label class="field"><span>Senha</span>
+      <input name="senha" type="password" autocomplete="current-password" required maxlength="128"></label>
+    <button class="btn btn--primary btn--block" type="submit">Entrar</button>
+  </form>
+</main>
+{% endblock %}
+

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% from "_macros.html" import badge_status, badge_prio with context %}
+{% block title %}{{ r.codigo }}{% endblock %}
+{% block crumb %}Requisições / {{ r.codigo }}{% endblock %}
+{% block content %}
+<section class="hero"><div><div class="eyebrow">{{ r.codigo }}</div><h1>{{ r.titulo }}</h1>
+  <p>{{ badge_status(r.status) }} {{ badge_prio(r.prioridade) }}</p></div>
+  <div class="hero__actions">
+    {% if pode_editar %}<a class="btn btn--ghost" href="{{ url_for('requisicoes.editar', req_id=r.id) }}">Editar</a>{% endif %}
+    {% if pode('requisicoes.excluir') %}
+    <form method="post" action="{{ url_for('requisicoes.excluir', req_id=r.id) }}" data-confirm="Excluir definitivamente {{ r.codigo }}?">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn--danger" type="submit">Excluir</button></form>
+    {% endif %}
+  </div>
+</section>
+
+<section class="grid-2">
+  <div class="panel">
+    <h2 class="panel__title">Detalhes</h2>
+    <dl class="dl">
+      <dt>Item</dt><dd>{{ r.item }}</dd>
+      <dt>Quantidade</dt><dd>{{ '%g'|format(r.quantidade|float) }} {{ r.unidade }}</dd>
+      <dt>Setor</dt><dd>{{ SETORES.get(r.setor, r.setor) }}</dd>
+      <dt>Filial</dt><dd>{{ r.filial }}</dd>
+      <dt>Valor estimado</dt><dd>{{ r.valor_estimado|moeda }}</dd>
+      <dt>Prazo</dt><dd>{{ r.prazo|dt('%d/%m/%Y') }}</dd>
+      <dt>Referência</dt><dd>{{ r.referencia or '—' }}</dd>
+      <dt>Requerente</dt><dd>{{ r.requerente_nome }}</dd>
+      <dt>Responsável</dt><dd>{{ r.responsavel_nome or '—' }}</dd>
+      <dt>Criada em</dt><dd>{{ r.criado_em|dt }}</dd>
+      <dt>Atualizada</dt><dd>{{ r.atualizado_em|dt }}</dd>
+    </dl>
+    <h3 class="panel__sub">Descrição</h3>
+    <p class="prewrap">{{ r.descricao }}</p>
+  </div>
+
+  <div class="panel">
+    {% if pode('requisicoes.alterar_status') %}
+    <h2 class="panel__title">Alterar situação</h2>
+    <form class="stack" method="post" action="{{ url_for('requisicoes.alterar_status', req_id=r.id) }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label class="field"><span>Nova situação</span><select name="status" required>
+        {% for s in proximos if s != r.status %}<option value="{{ s }}">{{ STATUS[s] }}</option>{% endfor %}</select></label>
+      <label class="field"><span>Comentário (obrigatório ao rejeitar/cancelar)</span><textarea name="comentario" rows="2" maxlength="500"></textarea></label>
+      <button class="btn btn--primary" type="submit">Atualizar situação</button>
+    </form>
+    {% endif %}
+    <h2 class="panel__title">Histórico</h2>
+    <ol class="timeline">
+      {% for h in historico %}
+      <li><time>{{ h.criado_em|dt }}</time>
+        <strong>{{ {'criada': 'Requisição criada', 'editada': 'Dados editados', 'status': 'Situação alterada'}.get(h.acao, h.acao) }}</strong>
+        {% if h.status_novo %}<span>{% if h.status_anterior %}{{ STATUS.get(h.status_anterior, h.status_anterior) }} → {% endif %}{{ STATUS.get(h.status_novo, h.status_novo) }}</span>{% endif %}
+        <small class="muted">por {{ h.usuario_nome or 'sistema' }}</small>
+        {% if h.comentario %}<p class="prewrap">{{ h.comentario }}</p>{% endif %}</li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <!-- Gradiente Cibernético 1: Ciano a Magenta/Roxo elétrico -->
+    <linearGradient id="cyberNeonGlow" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00F0FF" />
+      <stop offset="45%" stop-color="#7000FF" />
+      <stop offset="100%" stop-color="#FF007F" />
+    </linearGradient>
+
+    <!-- Gradiente Cibernético 2: Amarelo Cyberpunk 2077 para Laranja Neon -->
+    <linearGradient id="cyberYellowNeon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF500" />
+      <stop offset="60%" stop-color="#FCEE0A" />
+      <stop offset="100%" stop-color="#FF3C00" />
+    </linearGradient>
+
+    <!-- Gradientes sólidos e translúcidos para a tipografia das letras G e M -->
+    <linearGradient id="gradLetterG" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F0FF" stop-opacity="0.32" />
+      <stop offset="100%" stop-color="#7000FF" stop-opacity="0.08" />
+    </linearGradient>
+
+    <linearGradient id="gradLetterM" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF007F" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#FCEE0A" stop-opacity="0.32" />
+    </linearGradient>
+
+    <!-- Filtro de Bloom e Resplendor Fluido de Neon Multi-camada -->
+    <filter id="neonBloom" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="16" result="blurDeep" />
+      <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blurMid" />
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blurSharp" />
+      <feMerge>
+        <feMergeNode in="blurDeep" />
+        <feMergeNode in="blurMid" />
+        <feMergeNode in="blurSharp" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <style>
+      .bg-panel { fill: #05070B; stroke: #151C28; stroke-width: 2; rx: 56px; }
+      .cyber-glyph {
+        font-family: 'Rajdhani', 'Orbitron', 'Eurostile', 'Montserrat', 'Arial Black', sans-serif;
+        font-weight: 800;
+        font-size: 215px;
+        letter-spacing: -2px;
+      }
+    </style>
+  </defs>
+
+  <!-- Fundo escuro estilo ícone de app com cantos arredondados -->
+  <rect class="bg-panel" x="15" y="15" width="470" height="470" rx="56" />
+
+  <!-- ================= TIPOGRAFIA DE FUNDO: "G" E "M" (PREENCHIMENTO PURO, SEM TRAÇOS/TRACEJADOS) ================= -->
+  <g id="background-letters">
+    <!-- Letra G (Esquerda - Ciano/Violeta Fluido) -->
+    <text x="60" y="328" class="cyber-glyph" fill="url(#gradLetterG)">G</text>
+    
+    <!-- Letra M (Direita - Magenta/Amarelo Cyberpunk) -->
+    <text x="265" y="328" class="cyber-glyph" fill="url(#gradLetterM)">M</text>
+  </g>
+
+  <!-- ================= NÚCLEO HÍBRIDO: DELTA + INFINITO + NEON ================= -->
+
+  <!-- CAMADA 1: HALO DE NEON PROFUNDO (Difusão ampla) -->
+  <g filter="url(#neonBloom)" opacity="0.65">
+    <!-- Flanco e Laço Esquerdo (Ciano para Roxo Neon) -->
+    <path d="
+      M 250,95
+      C 230,95 125,230 90,290
+      C 62,338 82,390 140,390
+      C 195,390 230,336 250,295
+      C 260,274 275,245 290,225
+    " fill="none" stroke="url(#cyberNeonGlow)" stroke-width="28" stroke-linecap="round" stroke-linejoin="round" />
+
+    <!-- Flanco e Laço Direito (Amarelo Cyberpunk para Laranja Elétrico) -->
+    <path d="
+      M 250,95
+      C 270,95 375,230 410,290
+      C 438,338 418,390 360,390
+      C 305,390 270,336 250,295
+      C 240,274 225,245 210,225
+    " fill="none" stroke="url(#cyberYellowNeon)" stroke-width="28" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+
+  <!-- CAMADA 2: CORPO PRINCIPAL DE NEON FLUIDO CONTÍNUO -->
+  <g filter="url(#neonBloom)">
+    <!-- Curva do Laço Esquerdo -->
+    <path d="
+      M 250,95
+      C 230,95 125,230 90,290
+      C 62,338 82,390 140,390
+      C 195,390 230,336 250,295
+      C 260,274 275,245 290,225
+    " fill="none" stroke="url(#cyberNeonGlow)" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+
+    <!-- Curva do Laço Direito (Interseção fluida sobreposta) -->
+    <path d="
+      M 250,95
+      C 270,95 375,230 410,290
+      C 438,338 418,390 360,390
+      C 305,390 270,336 250,295
+      C 240,274 225,245 210,225
+    " fill="none" stroke="url(#cyberYellowNeon)" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+
+  <!-- CAMADA 3: HOT-CORE (Filamento hiperbrilhante contínuo) -->
+  <g filter="url(#neonBloom)" opacity="0.95">
+    <path d="
+      M 250,95
+      C 230,95 125,230 90,290
+      C 62,338 82,390 140,390
+      C 195,390 230,336 250,295
+      C 270,336 305,390 360,390
+      C 418,390 438,338 410,290
+      C 375,230 270,95 250,95 Z
+    " fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+
+  <!-- Centelhas de luz concentradas nos ápices -->
+  <circle cx="250" cy="95" r="4.5" fill="#FFFFFF" filter="url(#neonBloom)" />
+  <circle cx="140" cy="390" r="4" fill="#00F0FF" filter="url(#neonBloom)" />
+  <circle cx="360" cy="390" r="4" fill="#FCEE0A" filter="url(#neonBloom)" />
+  <circle cx="250" cy="295" r="3.5" fill="#FF007F" filter="url(#neonBloom)" />
+</svg>

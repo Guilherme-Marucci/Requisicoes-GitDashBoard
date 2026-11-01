@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}{{ titulo }}{% endblock %}
+{% block body_class %}login-page{% endblock %}
+{% block crumb %}{{ titulo }}{% endblock %}
+{% block content %}
+<section class="panel erro-box"><h1>{{ titulo }}</h1><p>{{ mensagem }}</p>
+  <a class="btn btn--primary" href="{{ url_for('main.painel') }}">Voltar ao painel</a></section>
+{% endblock %}
+{% block public %}
+<main class="login"><div class="login__card"><h1>{{ titulo }}</h1><p>{{ mensagem }}</p>
+  <a class="btn btn--primary btn--block" href="{{ url_for('auth.login') }}">Ir para o login</a></div></main>
+{% endblock %}
+
