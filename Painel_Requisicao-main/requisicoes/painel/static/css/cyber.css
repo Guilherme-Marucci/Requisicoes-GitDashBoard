@@ -196,5 +196,164 @@ textarea { resize: vertical; }
   .content { padding: 18px; } .topbar { padding: 12px 18px; }
   .field--wide { grid-column: auto; } .gh-form { grid-template-columns: 1fr; }
 }
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* =============================================================================
+   Modo TV / Kiosk Display (1080p / 4K / Salas de Monitoramento)
+   ============================================================================= */
+.tv-body {
+  margin: 0;
+  padding: 18px 24px 28px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  background-attachment: fixed;
+}
+.tv-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 20px;
+  border-radius: var(--radius);
+  background: rgba(17, 17, 31, 0.85);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+.tv-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  color: var(--ok);
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(57, 255, 136, 0.08);
+  border: 1px solid rgba(57, 255, 136, 0.3);
+}
+.tv-pulse-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--ok);
+  box-shadow: 0 0 10px var(--ok);
+  animation: tvPulse 1.8s infinite ease-in-out;
+}
+@keyframes tvPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.8); }
+}
+.tv-clock {
+  font-family: var(--mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-shadow: var(--glow);
+  letter-spacing: 0.08em;
+}
+.tv-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.tv-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+.tv-kpi-card {
+  padding: 20px 24px;
+  background: linear-gradient(180deg, var(--surface), var(--bg-2));
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+.tv-kpi-card span {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+.tv-kpi-card strong {
+  font-family: var(--mono);
+  font-size: clamp(2.2rem, 3.8vw, 3.4rem);
+  color: var(--accent);
+  text-shadow: var(--glow);
+  line-height: 1.1;
+}
+.tv-kpi-card.warn {
+  border-left-color: var(--warn);
+}
+.tv-kpi-card.warn strong {
+  color: var(--warn);
+  text-shadow: 0 0 14px rgba(255, 210, 63, 0.5);
+}
+.tv-kpi-card.magenta {
+  border-left-color: var(--accent-2);
+}
+.tv-kpi-card.magenta strong {
+  color: var(--accent-2);
+  text-shadow: 0 0 14px rgba(255, 43, 214, 0.5);
+}
+.tv-main-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1.9fr;
+  gap: 18px;
+  flex: 1;
+}
+.tv-panel-full {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.tv-table {
+  font-size: 1rem;
+}
+.tv-table th {
+  font-size: 0.8rem;
+  padding: 12px 14px;
+}
+.tv-table td {
+  padding: 13px 14px;
+}
+.tv-tab-btn {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-family: var(--mono);
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--muted);
+  transition: 0.2s;
+}
+.tv-tab-btn.is-active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.12);
+  box-shadow: var(--glow);
+}
+.tv-slide {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  animation: tvFadeIn 0.4s ease;
+}
+@keyframes tvFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.tv-hidden {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 

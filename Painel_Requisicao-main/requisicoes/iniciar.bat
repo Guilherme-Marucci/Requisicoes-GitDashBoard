@@ -48,8 +48,14 @@ if not exist ".env" (
 )
 
 echo [INFO] Utilizando: %PY_CMD%
-echo [INFO] Iniciando servidor do Painel em http://127.0.0.1:5000 ...
-echo [DICA] Para encerrar o servidor, pressione CTRL + C nesta janela.
+echo [INFO] Iniciando servidor do Painel em http://0.0.0.0:5000 ...
+echo [INFO] Acesso Desktop Local:   http://localhost:5000
+echo [INFO] Acesso Modo TV Kiosk:   http://localhost:5000/tv
+echo.
+echo [TV CORP] Para exibir em Smart TVs ou Raspberry Pi na mesma rede:
+echo           Acesse http://^<IP-DESTE-PC^>:5000/tv no navegador da TV.
+echo [DICA]    Pressione F11 ou a tecla F na TV para Tela Cheia sem bordas.
+echo [DICA]    Para encerrar o servidor, pressione CTRL + C nesta janela.
 echo.
 
 start "" "http://127.0.0.1:5000"

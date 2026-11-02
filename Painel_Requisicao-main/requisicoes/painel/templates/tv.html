@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>PAINEL CORPORATIVO · MODO TV KIOSK</title>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/favicon.svg') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/cyber.css') }}">
+  <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+</head>
+<body class="tv-body">
+
+  <!-- BARRA DE TOPO DA TV -->
+  <header class="tv-topbar">
+    <div style="display:flex; align-items:center; gap:16px;">
+      <span class="brand" style="margin:0; font-size:1.15rem;">
+        <span class="brand__mark">▲</span> REQ<span class="brand__sep">//</span>TV
+      </span>
+      <span class="tv-status-badge">
+        <span class="tv-pulse-dot"></span> AO VIVO
+      </span>
+      <span style="font-size:0.75rem; color:var(--muted); font-family:var(--mono);">
+        SINC: <span id="tv-countdown">30</span>s
+      </span>
+    </div>
+
+    <!-- RELÓGIO DIGITAL -->
+    <div style="display:flex; align-items:center; gap:12px;">
+      <span id="tv-date" style="font-size:0.85rem; color:var(--muted); font-family:var(--mono);">--/--/----</span>
+      <span class="tv-clock" id="tv-clock">00:00:00</span>
+    </div>
+
+    <!-- CONTROLES KIOSK -->
+    <div class="tv-controls">
+      <button type="button" class="tv-tab-btn is-active" id="btn-mode-auto" title="Alternar slides a cada 20 segundos">
+        ↻ Auto-Alternar
+      </button>
+      <button type="button" class="tv-tab-btn" id="btn-slide-req" title="Fixar visualização em Requisições">
+        ▣ Requisições
+      </button>
+      <button type="button" class="tv-tab-btn" id="btn-slide-gh" title="Fixar visualização em Projetos GitHub">
+        ⌥ GitHub
+      </button>
+
+      <select id="tv-theme-select" class="form__select" style="padding:4px 8px; font-size:0.75rem; width:auto; border-radius:999px;" title="Mudar tema neon">
+        <option value="dark">Tema: Dark Neon</option>
+        <option value="dark-pink">Tema: Cyber Pink</option>
+        <option value="dark-green">Tema: Matrix Green</option>
+        <option value="dark-blue">Tema: Ice Blue</option>
+        <option value="dark-red">Tema: Blood Red</option>
+        <option value="dark-purple">Tema: Synth Purple</option>
+      </select>
+
+      <button type="button" class="tv-tab-btn" id="btn-fullscreen" title="Expandir em Tela Cheia">
+        ⛶ Tela Cheia
+      </button>
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- SLIDE 1: REQUISIÇÕES (CHAMADOS & FILAS)   -->
+  <!-- ========================================== -->
+  <section class="tv-slide" id="slide-req">
+    <div class="tv-kpi-row">
+      <div class="tv-kpi-card">
+        <span>Total Geral</span>
+        <strong id="kpi-req-total">—</strong>
+      </div>
+      <div class="tv-kpi-card warn">
+        <span>Pendentes / Triagem</span>
+        <strong id="kpi-req-pendentes">—</strong>
+      </div>
+      <div class="tv-kpi-card">
+        <span>Em Andamento</span>
+        <strong id="kpi-req-andamento">—</strong>
+      </div>
+      <div class="tv-kpi-card" style="border-left-color: var(--ok);">
+        <span>Concluídas</span>
+        <strong id="kpi-req-concluidas" style="color: var(--ok); text-shadow: 0 0 14px rgba(57,255,136,0.5);">—</strong>
+      </div>
+      <div class="tv-kpi-card magenta">
+        <span>Críticas / Urgentes</span>
+        <strong id="kpi-req-criticas">—</strong>
+      </div>
+    </div>
+
+    <div class="tv-main-grid">
+      <!-- Painel Gráfico / Resumo -->
+      <div class="card tv-panel-full">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h2 style="font-size:0.95rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent); margin:0;">
+            Distribuição por Status
+          </h2>
+          <span style="font-size:0.7rem; color:var(--muted); font-family:var(--mono);">TEMPO REAL</span>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+          <canvas id="chart-tv-status" height="230" style="max-height:230px; width:100%;"></canvas>
+          <ul id="legend-tv-status" class="chart-legend" style="margin-top:14px; width:100%; justify-content:center;"></ul>
+        </div>
+        <div style="padding-top:12px; border-top:1px solid var(--border); font-size:0.8rem; color:var(--muted); text-align:center;">
+          Meta de Resolução SLA: <strong style="color:var(--text);">94.8%</strong> dentro do prazo
+        </div>
+      </div>
+
+      <!-- Tabela de Últimas Requisições -->
+      <div class="card tv-panel-full">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h2 style="font-size:0.95rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent); margin:0;">
+            Últimas Requisições Registradas
+          </h2>
+          <span style="font-size:0.75rem; color:var(--muted); font-family:var(--mono);">FEED DE ENTRADA</span>
+        </div>
+
+        <div style="overflow-x:auto; flex:1;">
+          <table class="table tv-table" style="width:100%;">
+            <thead>
+              <tr>
+                <th style="width:110px;">Código</th>
+                <th>Título / Objeto</th>
+                <th style="width:140px;">Setor</th>
+                <th style="width:100px;">Prioridade</th>
+                <th style="width:130px;">Status</th>
+                <th style="width:100px; text-align:right;">Data/Hora</th>
+              </tr>
+            </thead>
+            <tbody id="tv-tbody-req">
+              <tr>
+                <td colspan="6" style="text-align:center; padding:30px; color:var(--muted);">Carregando requisições...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- SLIDE 2: PROJETOS GITHUB & REPOSITÓRIOS   -->
+  <!-- ========================================== -->
+  <section class="tv-slide tv-hidden" id="slide-gh">
+    <div class="tv-kpi-row">
+      <div class="tv-kpi-card">
+        <span>Repositórios</span>
+        <strong id="kpi-gh-repos">—</strong>
+      </div>
+      <div class="tv-kpi-card warn">
+        <span>Estrelas Acumuladas</span>
+        <strong id="kpi-gh-stars">—</strong>
+      </div>
+      <div class="tv-kpi-card">
+        <span>Total de Forks</span>
+        <strong id="kpi-gh-forks">—</strong>
+      </div>
+      <div class="tv-kpi-card magenta">
+        <span>Commits Registrados</span>
+        <strong id="kpi-gh-commits">—</strong>
+      </div>
+      <div class="tv-kpi-card" style="border-left-color: var(--accent-2);">
+        <span>Linguagens Ativas</span>
+        <strong id="kpi-gh-langs" style="color:var(--accent-2);">—</strong>
+      </div>
+    </div>
+
+    <div class="tv-main-grid">
+      <!-- Painel Gráfico de Linguagens -->
+      <div class="card tv-panel-full">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h2 style="font-size:0.95rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent); margin:0;">
+            Linguagens dos Repositórios
+          </h2>
+          <span id="tv-gh-user-badge" style="font-size:0.75rem; color:var(--accent-2); font-family:var(--mono);">@GITHUB</span>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+          <canvas id="chart-tv-gh-lang" height="230" style="max-height:230px; width:100%;"></canvas>
+          <ul id="legend-tv-gh-lang" class="chart-legend" style="margin-top:14px; width:100%; justify-content:center;"></ul>
+        </div>
+        <div style="padding-top:12px; border-top:1px solid var(--border); font-size:0.8rem; color:var(--muted); text-align:center;">
+          Integração: <strong style="color:var(--ok);">Ativa</strong> via GitHub REST API v3
+        </div>
+      </div>
+
+      <!-- Tabela de Repositórios -->
+      <div class="card tv-panel-full">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h2 style="font-size:0.95rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent); margin:0;">
+            Repositórios em Destaque
+          </h2>
+          <span style="font-size:0.75rem; color:var(--muted); font-family:var(--mono);">PORTFÓLIO ATIVO</span>
+        </div>
+
+        <div style="overflow-x:auto; flex:1;">
+          <table class="table tv-table" style="width:100%;">
+            <thead>
+              <tr>
+                <th>Repositório</th>
+                <th style="width:130px;">Linguagem</th>
+                <th style="width:90px; text-align:center;">★ Stars</th>
+                <th style="width:90px; text-align:center;">⑂ Forks</th>
+                <th style="width:130px;">Visibilidade</th>
+                <th style="width:120px; text-align:right;">Último Push</th>
+              </tr>
+            </thead>
+            <tbody id="tv-tbody-gh">
+              <tr>
+                <td colspan="6" style="text-align:center; padding:30px; color:var(--muted);">Carregando repositórios...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCRIPTS -->
+  <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/tv.js') }}"></script>
+</body>
+</html>
+
